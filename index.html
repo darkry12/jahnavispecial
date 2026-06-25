@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Private Memory Film</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="memory-app" id="memoryApp">
+    <div class="app-particles" id="appParticles" aria-hidden="true"></div>
+
+    <section class="opening-screen is-active" id="openingScreen" aria-label="Profile selection">
+      <div class="opening-backdrop" aria-hidden="true"></div>
+      <div class="netflix-word" aria-label="Netflix">
+        <span>N</span><span>E</span><span>T</span><span>F</span><span>L</span><span>I</span><span>X</span>
+      </div>
+
+      <div class="profile-stage">
+        <p class="opening-eyebrow">Private memory film</p>
+        <h1>Who's watching?</h1>
+
+        <div class="profile-grid">
+          <button class="profile-card" type="button" data-profile="Dosa" data-image="images/idiot_dosa_story.jpg">
+            <span class="profile-image"><img src="images/idiot_dosa_story.jpg" alt="Dosa"></span>
+            <span class="profile-name">Dosa</span>
+          </button>
+
+          <button class="profile-card" type="button" data-profile="Dumbo" data-image="images/funny_faces.jpg">
+            <span class="profile-image"><img src="images/funny_faces.jpg" alt="Dumbo"></span>
+            <span class="profile-name">Dumbo</span>
+          </button>
+
+          <button class="profile-card" type="button" data-profile="Sleepyhead" data-image="images/closeup_cheek.jpg">
+            <span class="profile-image"><img src="images/closeup_cheek.jpg" alt="Sleepyhead"></span>
+            <span class="profile-name">Sleepyhead</span>
+          </button>
+
+          <button class="profile-card" type="button" data-profile="Idiot" data-image="images/mall_selfie.jpg">
+            <span class="profile-image"><img src="images/mall_selfie.jpg" alt="Idiot"></span>
+            <span class="profile-name">Idiot</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="story-screen" id="storyScreen" aria-label="Story mode">
+      <div class="progress-track" id="progressTrack" aria-hidden="true"></div>
+
+      <button class="music-toggle" id="musicToggle" type="button" aria-label="Play soft background music">
+        <span aria-hidden="true">♪</span>
+      </button>
+
+      <div class="story-blur-bg" id="storyBlurBg" aria-hidden="true"></div>
+      <div class="story-stage" id="storyStage"></div>
+      <div class="story-effects" id="storyEffects" aria-hidden="true"></div>
+
+      <button class="nav-zone nav-prev" id="navPrev" type="button" aria-label="Previous memory"></button>
+      <button class="nav-zone nav-next" id="navNext" type="button" aria-label="Next memory"></button>
+      <div class="story-hint" id="storyHint">Tap left or right</div>
+    </section>
+
+    <div class="netflix-transition" id="netflixTransition" aria-hidden="true"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
