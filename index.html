@@ -1,71 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Private Memory Film</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Private Memory Film — For Jahnavi</title>
+<meta name="description" content="A private memory film. Just for you.">
+<meta property="og:title" content="Something I made for you 🎬">
+<meta property="og:description" content="A private memory film. Just for you.">
+<meta property="og:image" content="images/idiot_dosa_story.jpg">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>🎬</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="memory-app" id="memoryApp">
-    <div class="app-particles" id="appParticles" aria-hidden="true"></div>
 
-    <section class="opening-screen is-active" id="openingScreen" aria-label="Profile selection">
-      <div class="opening-backdrop" aria-hidden="true"></div>
-      <div class="netflix-word" aria-label="Netflix">
-        <span>N</span><span>E</span><span>T</span><span>F</span><span>L</span><span>I</span><span>X</span>
+<!-- Film grain overlay -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- Safe-area letterbox -->
+<div class="letterbox-top" aria-hidden="true"></div>
+<div class="letterbox-bottom" aria-hidden="true"></div>
+
+<!-- Transition overlay -->
+<div id="transition-overlay" aria-hidden="true"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 1: INTRO
+     ══════════════════════════════════════════════════════════ -->
+<section id="screen-intro" class="screen active" role="main" aria-label="Welcome screen">
+  <p class="intro-mark">A Private Memory Film</p>
+  <h1 class="intro-title">Made for<br><span class="intro-name">Jahnavi.</span></h1>
+  <p class="intro-sub">Only for your eyes. No one else.</p>
+  <p class="intro-tap">Tap anywhere to begin</p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 2: PROFILE SELECTION
+     ══════════════════════════════════════════════════════════ -->
+<section id="screen-profiles" class="screen" role="region" aria-label="Choose your mood">
+  <p class="profiles-eyebrow">Private Memory Film</p>
+  <h2 class="profiles-title">Who's watching?</h2>
+
+  <div class="profiles-grid" role="list">
+
+    <button class="profile-card" data-profile="dosa" role="listitem" aria-label="Dosa — the one who actually finishes the food">
+      <img src="images/idiot_dosa_story.jpg" alt="Dosa" loading="eager">
+      <div class="profile-card-overlay"></div>
+      <div class="profile-card-tint card-warm"></div>
+      <div class="profile-card-name">
+        <span class="profile-name-emoji">😊</span>
+        <span class="profile-name-text">Dosa</span>
+        <span class="profile-name-sub">the food critic</span>
+      </div>
+    </button>
+
+    <button class="profile-card" data-profile="dumbo" role="listitem" aria-label="Dumbo — the dramatic one">
+      <img src="images/funny_faces.jpg" alt="Dumbo" loading="eager">
+      <div class="profile-card-overlay"></div>
+      <div class="profile-card-tint card-rose"></div>
+      <div class="profile-card-name">
+        <span class="profile-name-emoji">🐘</span>
+        <span class="profile-name-text">Dumbo</span>
+        <span class="profile-name-sub">the dramatic one</span>
+      </div>
+    </button>
+
+    <button class="profile-card" data-profile="sleepyhead" role="listitem" aria-label="Sleepyhead — professional napper">
+      <img src="images/closeup_cheek.jpg" alt="Sleepyhead" loading="eager">
+      <div class="profile-card-overlay"></div>
+      <div class="profile-card-tint card-teal"></div>
+      <div class="profile-card-name">
+        <span class="profile-name-emoji">😴</span>
+        <span class="profile-name-text">Sleepyhead</span>
+        <span class="profile-name-sub">professional napper</span>
+      </div>
+    </button>
+
+    <button class="profile-card" data-profile="idiot" role="listitem" aria-label="Idiot — but in the best way">
+      <img src="images/mall_selfie.jpg" alt="Idiot" loading="eager">
+      <div class="profile-card-overlay"></div>
+      <div class="profile-card-tint card-indigo"></div>
+      <div class="profile-card-name">
+        <span class="profile-name-emoji">🙄</span>
+        <span class="profile-name-text">Idiot</span>
+        <span class="profile-name-sub">but in the best way</span>
+      </div>
+    </button>
+
+  </div>
+
+  <p class="profiles-bottom">All roads lead to the same memory</p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 3: STORY VIEWER
+     ══════════════════════════════════════════════════════════ -->
+<section id="screen-stories" class="screen" role="region" aria-label="Memory stories">
+
+  <!-- Progress bars -->
+  <div class="progress-bar-container" role="progressbar" aria-label="Story progress" id="progress-container"></div>
+
+  <!-- Top bar -->
+  <div class="story-topbar">
+    <div class="story-profile-info">
+      <div class="story-avatar"><img id="avatar-img" src="" alt="Profile"></div>
+      <div>
+        <div class="story-profile-name" id="story-profile-name">Jahnavi</div>
+        <div class="story-profile-time">2020 – Present</div>
+      </div>
+    </div>
+    <button class="story-close-btn" id="close-stories" aria-label="Back to profiles">✕</button>
+  </div>
+
+  <!-- Tap zones -->
+  <div class="tap-prev" id="tap-prev" aria-label="Previous memory"></div>
+  <div class="tap-next" id="tap-next" aria-label="Next memory"></div>
+  <div class="tap-flash left" id="flash-left"></div>
+  <div class="tap-flash right" id="flash-right"></div>
+
+  <!-- Stories injected by JS -->
+  <div id="slides-container"></div>
+
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 4: FINAL LETTER
+     ══════════════════════════════════════════════════════════ -->
+<section id="screen-letter" class="screen" role="region" aria-label="Final letter">
+  <div class="letter-bg" aria-hidden="true"></div>
+  <div class="letter-scroll">
+    <p class="letter-preamble">For your eyes only</p>
+    <div class="letter-divider" aria-hidden="true"></div>
+
+    <article class="letter-paper" role="article">
+      <span class="letter-salutation">Hey you,</span>
+
+      <div class="letter-body">
+        <p class="emotional">Thank you for being there.</p>
+
+        <p>Thank you for staying — through the good phases and the bad ones. Through the days I was a lot, and the days I wasn't enough.</p>
+
+        <p class="emotional">I know I wasn't always the best friend you deserved.<br>
+        I know I made mistakes.<br>
+        I know there were moments I could have done better.</p>
+
+        <p>But even after all of that — somehow you stayed.</p>
+
+        <p>Thank you for every conversation that went way too long.<br>
+        Thank you for every laugh that didn't make sense to anyone else.<br>
+        Thank you for every roast that I deserved.<br>
+        Thank you for every random memory that I still think about.</p>
+
+        <p class="emotional">And thank you for being one of the few people who made life genuinely better, simply by being in it.</p>
+
+        <p>No matter where life takes us next, I genuinely hope you stay exactly the way you are.</p>
+
+        <p>
+          <span class="funny">A little dramatic.</span><br>
+          <span class="funny">A little annoying.</span><br>
+          <span class="funny">A little sleepy.</span><br>
+          <span class="funny">A little idiot.</span>
+        </p>
+
+        <p><span class="emphasis">But completely unforgettable.</span></p>
       </div>
 
-      <div class="profile-stage">
-        <p class="opening-eyebrow">Private memory film</p>
-        <h1>Who's watching?</h1>
-
-        <div class="profile-grid">
-          <button class="profile-card" type="button" data-profile="Dosa" data-image="images/idiot_dosa_story.jpg">
-            <span class="profile-image"><img src="images/idiot_dosa_story.jpg" alt="Dosa"></span>
-            <span class="profile-name">Dosa</span>
-          </button>
-
-          <button class="profile-card" type="button" data-profile="Dumbo" data-image="images/funny_faces.jpg">
-            <span class="profile-image"><img src="images/funny_faces.jpg" alt="Dumbo"></span>
-            <span class="profile-name">Dumbo</span>
-          </button>
-
-          <button class="profile-card" type="button" data-profile="Sleepyhead" data-image="images/closeup_cheek.jpg">
-            <span class="profile-image"><img src="images/closeup_cheek.jpg" alt="Sleepyhead"></span>
-            <span class="profile-name">Sleepyhead</span>
-          </button>
-
-          <button class="profile-card" type="button" data-profile="Idiot" data-image="images/mall_selfie.jpg">
-            <span class="profile-image"><img src="images/mall_selfie.jpg" alt="Idiot"></span>
-            <span class="profile-name">Idiot</span>
-          </button>
-        </div>
+      <div class="letter-closing">
+        <span style="font-family:var(--sans);font-size:13px;color:rgba(240,237,232,0.5)">With love (and a lot of roasting),</span>
+        <span class="letter-sign">Your annoying best friend ♡</span>
       </div>
-    </section>
+    </article>
 
-    <section class="story-screen" id="storyScreen" aria-label="Story mode">
-      <div class="progress-track" id="progressTrack" aria-hidden="true"></div>
-
-      <button class="music-toggle" id="musicToggle" type="button" aria-label="Play soft background music">
-        <span aria-hidden="true">♪</span>
+    <div class="letter-footer">
+      <button class="replay-btn" id="replay-btn" aria-label="Watch again">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <polyline points="1 4 1 10 7 10"></polyline>
+          <path d="M3.51 15a9 9 0 1 0 .49-4.5"></path>
+        </svg>
+        Watch again
       </button>
+      <p class="letter-date">2020 – Forever</p>
+    </div>
+  </div>
+</section>
 
-      <div class="story-blur-bg" id="storyBlurBg" aria-hidden="true"></div>
-      <div class="story-stage" id="storyStage"></div>
-      <div class="story-effects" id="storyEffects" aria-hidden="true"></div>
+<!-- ══════════════════════════════════════════════════════════
+     MUSIC PLAYER
+     ══════════════════════════════════════════════════════════ -->
+<div id="music-player" role="complementary" aria-label="Music player">
+  <button class="music-play-btn" id="music-toggle" aria-label="Play ambient music">
+    <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  </button>
+  <div class="music-info">
+    <span class="music-title">Memory Tape</span>
+    <span class="music-sub">ambient · lo-fi</span>
+  </div>
+  <div class="music-bars paused" id="music-bars" aria-hidden="true">
+    <div class="music-bar"></div>
+    <div class="music-bar"></div>
+    <div class="music-bar"></div>
+    <div class="music-bar"></div>
+  </div>
+</div>
 
-      <button class="nav-zone nav-prev" id="navPrev" type="button" aria-label="Previous memory"></button>
-      <button class="nav-zone nav-next" id="navNext" type="button" aria-label="Next memory"></button>
-      <div class="story-hint" id="storyHint">Tap left or right</div>
-    </section>
+<!-- Hidden audio element — user must interact first -->
+<audio id="bg-audio" loop preload="none">
+  <!-- Fallback: generated tone via Web Audio if no file -->
+</audio>
 
-    <div class="netflix-transition" id="netflixTransition" aria-hidden="true"></div>
-  </main>
-
-  <script src="script.js"></script>
+<script src="script.js" defer></script>
 </body>
 </html>
