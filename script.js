@@ -1,393 +1,495 @@
-const app = document.querySelector("#memoryApp");
-const openingScreen = document.querySelector("#openingScreen");
-const storyScreen = document.querySelector("#storyScreen");
-const progressTrack = document.querySelector("#progressTrack");
-const storyBlurBg = document.querySelector("#storyBlurBg");
-const storyStage = document.querySelector("#storyStage");
-const storyEffects = document.querySelector("#storyEffects");
-const appParticles = document.querySelector("#appParticles");
-const transitionLayer = document.querySelector("#netflixTransition");
-const musicToggle = document.querySelector("#musicToggle");
-const navPrev = document.querySelector("#navPrev");
-const navNext = document.querySelector("#navNext");
-const profiles = document.querySelectorAll(".profile-card");
-
-const stories = [
+/* ══════════════════════════════════════════════════════════
+   DATA — STORIES
+   ══════════════════════════════════════════════════════════ */
+const STORIES = [
   {
-    type: "photo",
-    image: "images/hero_fairy_light.jpg",
-    focus: "center center",
-    label: "01 / Fairy lights",
-    title: "Tu fairy lights se zyada glow kar rahi thi.",
-    text: "Sach bolu, lights background mein thi. Main attention toh obviously tu le gayi."
+    id:1,
+    img:'images/idiot_dosa_story.jpg',
+    layout:'zoom',
+    overlay:'cinematic',
+    label:'Chapter I',
+    headline:'The Dosa <em>Incident</em>',
+    caption:'You ordered one. Then ate three. Then complained you were full.<br><strong>We all saw it happen.</strong>',
+    color:'warm',
+    imgPos:'center top'
   },
   {
-    type: "photo",
-    image: "images/closeup_cheek.jpg",
-    focus: "center top",
-    label: "02 / Soft chaos",
-    title: "Tu realize bhi nahi karti.",
-    text: "Kitne logon ka day better kar deti hai tu, bas ek smile ya ek random expression se."
+    id:2,
+    img:'images/funny_faces.jpg',
+    layout:'film',
+    overlay:'default',
+    label:'Chapter II',
+    headline:'Professional<br>Face Maker',
+    caption:'Nobody told you to make that face. You just did it.<br><strong>And somehow it became the best photo.</strong>',
+    color:'rose',
+    imgPos:'center center'
   },
   {
-    type: "photo",
-    image: "images/white_dress.jpg",
-    focus: "center center",
-    label: "03 / Just you",
-    title: "Is photo mein tu effortless lag rahi hai.",
-    text: "Like tu try bhi nahi karti, and still somehow poora frame expensive lagne lagta hai."
+    id:3,
+    img:'images/closeup_cheek.jpg',
+    layout:'card',
+    overlay:'default',
+    label:'Chapter III',
+    headline:'',
+    caption:'This one looks like a painting.\n<em>And yet somehow it's just Tuesday.</em>',
+    color:'teal',
+    imgPos:'center top',
+    polaroid:'She wasn\'t asleep.\nShe was "resting her eyes."'
   },
   {
-    type: "photo",
-    image: "images/saree_smile.jpg",
-    focus: "center center",
-    label: "04 / That smile",
-    title: "Teri smile unfair hai.",
-    text: "Matlab seriously, koi itna sweet aur itna dangerous same time pe kaise ho sakta hai?"
+    id:4,
+    img:'images/mall_selfie.jpg',
+    layout:'scrapbook',
+    overlay:'default',
+    label:'Chapter IV',
+    headline:'The Mall<br>Chronicles',
+    caption:'You said "one hour max." We were there for four.<br><strong>I bought nothing. You bought everything.</strong>',
+    color:'indigo',
+    imgPos:'center 20%'
   },
   {
-    type: "photo",
-    image: "images/funny_faces.jpg",
-    focus: "center center",
-    label: "05 / No filter",
-    title: "Is photo mein bhi tu random baat pe hass rahi hogi.",
-    text: "Aur wahi best part hai. Tu posed photos se zyada real moments mein cute lagti hai."
-  },
-  {
-    type: "photo",
-    image: "images/navratri_mirror.jpg",
-    focus: "center center",
-    label: "06 / Mirror night",
-    title: "Tu full main-character lag rahi thi.",
-    text: "Navratri, mirror, lights, outfit, sab perfect. But honestly, confidence tera best accessory tha."
-  },
-  {
-    type: "photo",
-    image: "images/bestfriend_hug.jpg",
-    focus: "center center",
-    label: "07 / Warmth",
-    title: "Tu safe feeling deti hai.",
-    text: "Kuch log loud hote hain. Tu bas present hoti hai, aur things thodi easier lagne lagti hain."
-  },
-  {
-    type: "photo",
-    image: "images/idiot_dosa_story.jpg",
-    focus: "center center",
-    label: "08 / Dosa file",
-    title: "Tu aur tere stupid memories.",
-    text: "Dosa, jokes, random drama, sab kuch itna silly hai, but somehow mujhe bahut special lagta hai."
-  },
-  {
-    type: "photo",
-    image: "images/mall_selfie.jpg",
-    focus: "center center",
-    label: "09 / Us",
-    title: "Ye photo simple hai, but favourite hai.",
-    text: "Because isme hum dono hain. No perfect pose, no perfect timing, bas ek memory jo real lagti hai."
-  },
-  {
-    type: "letter",
-    label: "Final note",
-    title: "Hey you ❤️",
-    lines: [
-      "Main ye sab likhte hue honestly thoda awkward feel kar raha hoon, kyunki real feelings ko fancy words mein fit karna easy nahi hota.",
-      "Tu shayad kabhi samajh bhi nahi payegi ki kitni baar tune bina jaane meri help ki hai.",
-      "Kabhi ek normal sa message, kabhi tera stupid joke, kabhi sirf ye feel hona ki tu around hai.",
-      "I do not think you try to be important. Tu bas apni tarah rehti hai, and that is exactly why you matter.",
-      "Tu seriously duniya ki sabse zyada sleepy insaan hai 😭, but somehow even that has become one of my favourite things about you.",
-      "Tera hasna, tera annoy karna, tera random drama, tera kabhi-kabhi overthink karna, sab kuch very you hai.",
-      "Aur mujhe woh version of you bahut pasand hai. Not perfect. Not always sorted. Bas real.",
-      "Mall wali photo special hai because usme hum dono hain, but baaki photos bhi special hain because they are pieces of you.",
-      "You never realize how easily you can make a room lighter.",
-      "Kabhi kabhi tu bas ek line bolti hai and my mood genuinely better ho jata hai.",
-      "I know main hamesha properly express nahi karta, but you are important to me. More than I probably say.",
-      "So thank you. For being funny, soft, irritating, sleepy, dramatic, kind, and completely you.",
-      "Aur haan, agar ye sab padh ke tu smile kar rahi hai, toh good. Mission successful.",
-      "Your Idiot Dosa ❤️"
-    ]
+    id:5,
+    img:'images/idiot_dosa_story.jpg',
+    layout:'top',
+    overlay:'top',
+    label:'But also—',
+    headline:'<em>Thank you<br>for staying.</em>',
+    caption:'Through every phase. Every mood. Every version of me that wasn\'t easy to be around.<br><strong>You stayed anyway.</strong>',
+    color:'gold',
+    imgPos:'center bottom'
   }
 ];
 
-let currentIndex = 0;
-let started = false;
-let touchStartX = 0;
-let audioContext;
-let audioNodes = [];
-
-const random = (min, max) => min + Math.random() * (max - min);
-
-const createAmbientParticles = () => {
-  const fragment = document.createDocumentFragment();
-
-  for (let i = 0; i < 54; i += 1) {
-    const dot = document.createElement("span");
-    dot.className = i % 7 === 0 ? "fairy" : "particle";
-    dot.style.left = `${random(0, 100)}%`;
-    dot.style.top = `${random(0, 100)}%`;
-    dot.style.setProperty("--size", `${random(2, 6)}px`);
-    dot.style.setProperty("--duration", `${random(8, 17)}s`);
-    dot.style.setProperty("--delay", `${random(-14, 0)}s`);
-    dot.style.setProperty("--drift", `${random(-54, 54)}px`);
-    fragment.appendChild(dot);
-  }
-
-  appParticles.appendChild(fragment);
+/* ══════════════════════════════════════════════════════════
+   PROFILE META
+   ══════════════════════════════════════════════════════════ */
+const PROFILES = {
+  dosa:     {name:'Dosa 😊',   img:'images/idiot_dosa_story.jpg'},
+  dumbo:    {name:'Dumbo 🐘',  img:'images/funny_faces.jpg'},
+  sleepyhead:{name:'Sleepyhead 😴',img:'images/closeup_cheek.jpg'},
+  idiot:    {name:'Idiot 🙄',  img:'images/mall_selfie.jpg'}
 };
 
-const createSlideEffects = (isLetter = false) => {
-  storyEffects.innerHTML = "";
-  const fragment = document.createDocumentFragment();
-  const particleCount = isLetter ? 36 : 22;
+/* ══════════════════════════════════════════════════════════
+   STATE
+   ══════════════════════════════════════════════════════════ */
+let currentScreen = 'intro';
+let currentSlide  = 0;
+let isHolding     = false;
+let holdTimer     = null;
+let autoTimer     = null;
+let musicPlaying  = false;
+let audioCtx      = null;
+let gainNode      = null;
 
-  for (let i = 0; i < particleCount; i += 1) {
-    const dot = document.createElement("span");
-    dot.className = i % 4 === 0 ? "fairy" : "particle";
-    dot.style.left = `${random(0, 100)}%`;
-    dot.style.top = `${random(12, 100)}%`;
-    dot.style.setProperty("--size", `${random(2, 7)}px`);
-    dot.style.setProperty("--duration", `${random(7, 15)}s`);
-    dot.style.setProperty("--delay", `${random(-10, 0)}s`);
-    dot.style.setProperty("--drift", `${random(-42, 42)}px`);
-    fragment.appendChild(dot);
-  }
-
-  if (isLetter) {
-    for (let i = 0; i < 8; i += 1) {
-      const heart = document.createElement("span");
-      heart.className = "heart-outline";
-      heart.style.left = `${random(8, 92)}%`;
-      heart.style.top = `${random(18, 92)}%`;
-      heart.style.setProperty("--size", `${random(14, 30)}px`);
-      heart.style.setProperty("--duration", `${random(8, 16)}s`);
-      heart.style.setProperty("--delay", `${random(-10, 0)}s`);
-      heart.style.setProperty("--drift", `${random(-60, 60)}px`);
-      fragment.appendChild(heart);
-    }
-
-    for (let i = 0; i < 10; i += 1) {
-      const note = document.createElement("span");
-      note.className = "note-paper";
-      note.style.left = `${random(5, 95)}%`;
-      note.style.top = `${random(20, 96)}%`;
-      note.style.setProperty("--duration", `${random(10, 18)}s`);
-      note.style.setProperty("--delay", `${random(-12, 0)}s`);
-      note.style.setProperty("--drift", `${random(-70, 70)}px`);
-      fragment.appendChild(note);
-    }
-  }
-
-  storyEffects.appendChild(fragment);
-};
-
-const createProgress = () => {
-  progressTrack.innerHTML = stories.map(() => (
-    '<span class="progress-segment"><span class="progress-fill"></span></span>'
-  )).join("");
-};
-
-const updateProgress = () => {
-  progressTrack.querySelectorAll(".progress-segment").forEach((segment, index) => {
-    segment.classList.toggle("is-complete", index < currentIndex);
-    segment.classList.toggle("is-current", index === currentIndex);
+/* ══════════════════════════════════════════════════════════
+   SCREEN NAVIGATION
+   ══════════════════════════════════════════════════════════ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove('active');
   });
-};
+  const target = document.getElementById('screen-'+id);
+  if(target) target.classList.add('active');
+  currentScreen = id;
+}
 
-const photoSlide = (story, direction) => `
-  <article class="slide photo-slide" style="--enter-x:${direction * 34}px">
-    <img class="poster-img" src="${story.image}" alt="${story.title}" style="--focus:${story.focus};--move-x:${direction * -10}px;--move-y:${random(-8, 8)}px">
-    <div class="caption-block">
-      <p class="kicker">${story.label}</p>
-      <h2 class="slide-title">${story.title}</h2>
-      <p class="slide-text">${story.text}</p>
-    </div>
-  </article>
-`;
+function transitionTo(id, delay=0){
+  const overlay = document.getElementById('transition-overlay');
+  overlay.classList.add('fade-in');
+  setTimeout(()=>{
+    showScreen(id);
+    if(id === 'letter'){
+      setTimeout(()=>{
+        document.getElementById('music-player').classList.add('visible');
+      }, 800);
+    }
+    setTimeout(()=>{
+      overlay.classList.remove('fade-in');
+    }, 600);
+  }, delay + 500);
+}
 
-const letterSlide = (story) => {
-  const lines = story.lines.map((line) => `<p class="letter-line">${line}</p>`).join("");
-  return `
-    <article class="slide letter-slide" style="--enter-x:28px">
-      <div class="letter-scroll">
-        <div class="letter-panel">
-          <h2 class="letter-heading">${story.title}</h2>
-          <p class="letter-subtitle">${story.label}</p>
-          <div class="letter-lines">${lines}</div>
-          <div class="ending-magic" aria-hidden="true">
-            <div class="light-string" id="lightString"></div>
+/* ══════════════════════════════════════════════════════════
+   SLIDE BUILDER
+   ══════════════════════════════════════════════════════════ */
+function buildSlides(){
+  const container = document.getElementById('slides-container');
+  const progContainer = document.getElementById('progress-container');
+  container.innerHTML = '';
+  progContainer.innerHTML = '';
+
+  STORIES.forEach((story, i)=>{
+    // Progress segment
+    const seg = document.createElement('div');
+    seg.className = 'progress-seg';
+    seg.id = `prog-${i}`;
+    seg.innerHTML = '<div class="progress-fill"></div>';
+    progContainer.appendChild(seg);
+
+    // Slide
+    const slide = document.createElement('div');
+    slide.className = 'story-slide';
+    slide.dataset.layout = story.layout;
+    slide.dataset.index = i;
+
+    // Build inner HTML based on layout
+    let inner = '';
+
+    if(story.layout === 'film'){
+      inner += `
+        <div class="film-frame-border" aria-hidden="true">
+          <div class="film-holes left">
+            ${Array(8).fill('<div class="film-hole"></div>').join('')}
           </div>
-          <div class="letter-actions">
-            <button class="letter-action" type="button" data-action="replay">Replay</button>
-            <button class="letter-action" type="button" data-action="back">Back</button>
+          <div class="film-holes right">
+            ${Array(8).fill('<div class="film-hole"></div>').join('')}
           </div>
+          <div class="film-counter">MEMORY FILM · ${String(i+1).padStart(3,'0')} · 35mm</div>
         </div>
-      </div>
-    </article>
-  `;
-};
-
-const addFairyLights = () => {
-  const lightString = document.querySelector("#lightString");
-  if (!lightString) return;
-
-  for (let i = 0; i < 13; i += 1) {
-    const bulb = document.createElement("span");
-    bulb.className = "bulb";
-    bulb.style.setProperty("--left", `${i * 8.2}%`);
-    bulb.style.setProperty("--top", `${Math.sin(i / 1.3) * 18 + 22}px`);
-    bulb.style.setProperty("--delay", `${i * 0.12}s`);
-    lightString.appendChild(bulb);
-  }
-};
-
-const revealLetterLines = () => {
-  document.querySelectorAll(".letter-line").forEach((line, index) => {
-    setTimeout(() => line.classList.add("is-visible"), 380 + index * 170);
-  });
-};
-
-const renderStory = (direction = 1) => {
-  const story = stories[currentIndex];
-  const isLetter = story.type === "letter";
-
-  storyScreen.classList.toggle("is-letter", isLetter);
-  storyBlurBg.style.backgroundImage = story.image ? `url("${story.image}")` : "none";
-  storyStage.innerHTML = isLetter ? letterSlide(story) : photoSlide(story, direction);
-  createSlideEffects(isLetter);
-  updateProgress();
-
-  requestAnimationFrame(() => {
-    const slide = storyStage.querySelector(".slide");
-    slide.classList.add("is-visible");
-
-    if (isLetter) {
-      addFairyLights();
-      revealLetterLines();
+        <img class="story-img" src="${story.img}" alt="Memory ${i+1}" loading="lazy" style="object-position:${story.imgPos||'center center'}">
+        <div class="story-overlay overlay-${story.overlay}"></div>
+        <div class="story-content">
+          <span class="story-label">${story.label}</span>
+          <h2 class="story-headline">${story.headline}</h2>
+          <p class="story-caption">${story.caption}</p>
+        </div>
+      `;
+    } else if(story.layout === 'card'){
+      inner += `
+        <img class="story-img" src="${story.img}" alt="Memory ${i+1}" loading="lazy" style="object-position:${story.imgPos||'center top'}">
+        <div class="story-overlay overlay-${story.overlay}"></div>
+        <div class="card-tape tl" aria-hidden="true"></div>
+        <div class="card-tape tr" aria-hidden="true"></div>
+        <div class="card-caption-polaroid">
+          <p class="polaroid-text">${(story.polaroid||'').replace(/\n/g,'<br>')}</p>
+        </div>
+      `;
+    } else if(story.layout === 'scrapbook'){
+      inner += `
+        <img class="story-img" src="${story.img}" alt="Memory ${i+1}" loading="lazy" style="object-position:${story.imgPos||'center center'}">
+        <div class="story-overlay overlay-${story.overlay}"></div>
+        <div class="story-content">
+          <span class="story-label">${story.label}</span>
+          <h2 class="story-headline">${story.headline}</h2>
+          <p class="story-caption">${story.caption}</p>
+        </div>
+      `;
+    } else {
+      inner += `
+        <img class="story-img" src="${story.img}" alt="Memory ${i+1}" loading="lazy" style="object-position:${story.imgPos||'center center'}">
+        <div class="story-overlay overlay-${story.overlay}"></div>
+        <div class="story-content">
+          <span class="story-label">${story.label}</span>
+          <h2 class="story-headline">${story.headline}</h2>
+          <p class="story-caption">${story.caption}</p>
+        </div>
+      `;
     }
+
+    slide.innerHTML = inner;
+    container.appendChild(slide);
   });
-};
+}
 
-const goTo = (index, direction = 1) => {
-  if (index < 0 || index >= stories.length || index === currentIndex) return;
-  currentIndex = index;
-  renderStory(direction);
-};
+/* ══════════════════════════════════════════════════════════
+   STORY NAVIGATION
+   ══════════════════════════════════════════════════════════ */
+function goToSlide(index, direction='next'){
+  const slides = document.querySelectorAll('.story-slide');
+  const total  = slides.length;
+  if(index < 0) index = 0;
 
-const nextStory = () => goTo(currentIndex + 1, 1);
-const prevStory = () => goTo(currentIndex - 1, -1);
-
-const isControlTarget = (target) => (
-  Boolean(target.closest(".music-toggle, .letter-action, .progress-track"))
-);
-
-const isScrollableLetterTarget = (target) => (
-  storyScreen.classList.contains("is-letter") && Boolean(target.closest(".letter-scroll"))
-);
-
-const handleStoryTap = (event) => {
-  if (!storyScreen.classList.contains("is-active")) return;
-  if (isControlTarget(event.target) || isScrollableLetterTarget(event.target)) return;
-
-  const screenMidpoint = storyScreen.getBoundingClientRect().left + storyScreen.getBoundingClientRect().width / 2;
-
-  if (event.clientX < screenMidpoint) {
-    prevStory();
-  } else {
-    nextStory();
-  }
-};
-
-const startStory = (profile) => {
-  if (started) return;
-  started = true;
-
-  const image = profile.dataset.image;
-  const profileRect = profile.querySelector(".profile-image").getBoundingClientRect();
-  const appRect = app.getBoundingClientRect();
-  const originX = profileRect.left + profileRect.width / 2 - (appRect.left + appRect.width / 2);
-  const originY = profileRect.top + profileRect.height / 2 - (appRect.top + appRect.height / 2);
-
-  transitionLayer.style.setProperty("--chosen-image", `url("${image}")`);
-  transitionLayer.style.setProperty("--origin-x", `${originX}px`);
-  transitionLayer.style.setProperty("--origin-y", `${originY}px`);
-  transitionLayer.classList.add("is-running");
-  openingScreen.classList.add("is-leaving");
-
-  setTimeout(() => {
-    storyScreen.classList.add("is-active");
-    renderStory(1);
-  }, 360);
-
-  setTimeout(() => {
-    openingScreen.hidden = true;
-    transitionLayer.classList.remove("is-running");
-  }, 1260);
-};
-
-const toggleMusic = async () => {
-  musicToggle.classList.toggle("is-on");
-
-  if (!musicToggle.classList.contains("is-on")) {
-    audioNodes.forEach((node) => node.stop && node.stop());
-    audioNodes = [];
+  // Last slide → go to letter
+  if(index >= total){
+    clearAutoTimer();
+    transitionTo('letter');
     return;
   }
 
-  audioContext = audioContext || new AudioContext();
-  await audioContext.resume();
-
-  const master = audioContext.createGain();
-  master.gain.value = 0.026;
-  master.connect(audioContext.destination);
-
-  [174.61, 220, 261.63, 329.63].forEach((frequency, index) => {
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    oscillator.type = index % 2 ? "triangle" : "sine";
-    oscillator.frequency.value = frequency;
-    gain.gain.value = index === 0 ? 0.55 : 0.22;
-    oscillator.connect(gain);
-    gain.connect(master);
-    oscillator.start();
-    audioNodes.push(oscillator);
+  // Remove old classes
+  slides.forEach((s,i)=>{
+    s.classList.remove('active','exit-left','enter-right');
   });
-};
 
-profiles.forEach((profile) => profile.addEventListener("click", () => startStory(profile)));
-navNext.addEventListener("click", (event) => {
-  event.stopPropagation();
-  nextStory();
-});
-navPrev.addEventListener("click", (event) => {
-  event.stopPropagation();
-  prevStory();
-});
-musicToggle.addEventListener("click", toggleMusic);
-storyScreen.addEventListener("click", handleStoryTap);
+  // Activate new
+  const activeSlide = slides[index];
+  activeSlide.classList.add('active');
 
-storyStage.addEventListener("click", (event) => {
-  const action = event.target.dataset.action;
-  if (action === "replay") {
-    currentIndex = 0;
-    renderStory(-1);
+  // Update progress bars
+  document.querySelectorAll('.progress-seg').forEach((seg,i)=>{
+    seg.classList.remove('done','active','paused');
+    if(i < index) seg.classList.add('done');
+    else if(i === index) seg.classList.add('active');
+  });
+
+  // Re-trigger zoom if applicable
+  const img = activeSlide.querySelector('.story-img');
+  if(img && activeSlide.dataset.layout === 'zoom'){
+    img.style.animation = 'none';
+    void img.offsetWidth;
+    img.style.animation = '';
   }
-  if (action === "back") prevStory();
+
+  currentSlide = index;
+  startAutoAdvance();
+}
+
+function nextSlide(){
+  clearAutoTimer();
+  goToSlide(currentSlide + 1, 'next');
+  flashRight();
+}
+function prevSlide(){
+  clearAutoTimer();
+  if(currentSlide > 0) goToSlide(currentSlide - 1, 'prev');
+  flashLeft();
+}
+
+function flashRight(){
+  const el = document.getElementById('flash-right');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),200);
+}
+function flashLeft(){
+  const el = document.getElementById('flash-left');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),200);
+}
+
+function startAutoAdvance(){
+  clearAutoTimer();
+  autoTimer = setTimeout(()=>{
+    if(!isHolding) goToSlide(currentSlide+1);
+  }, 5500);
+}
+
+function clearAutoTimer(){
+  if(autoTimer){ clearTimeout(autoTimer); autoTimer=null; }
+}
+
+function pauseProgress(){
+  isHolding = true;
+  const seg = document.getElementById(`prog-${currentSlide}`);
+  if(seg) seg.classList.add('paused');
+  clearAutoTimer();
+}
+
+function resumeProgress(){
+  isHolding = false;
+  const seg = document.getElementById(`prog-${currentSlide}`);
+  if(seg) seg.classList.remove('paused');
+  startAutoAdvance();
+}
+
+/* ══════════════════════════════════════════════════════════
+   MUSIC — WEB AUDIO AMBIENT TONE
+   ══════════════════════════════════════════════════════════ */
+function initAudio(){
+  if(audioCtx) return;
+  try{
+    audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    gainNode = audioCtx.createGain();
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.connect(audioCtx.destination);
+
+    // Gentle ambient: layered sine tones
+    const freqs = [110, 165, 220, 275, 330];
+    freqs.forEach((freq, i)=>{
+      const osc = audioCtx.createOscillator();
+      const g   = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      g.gain.setValueAtTime(0.008 - (i*0.001), audioCtx.currentTime);
+      osc.connect(g);
+      g.connect(gainNode);
+      osc.start();
+
+      // Subtle LFO
+      const lfo = audioCtx.createOscillator();
+      const lfoGain = audioCtx.createGain();
+      lfo.frequency.value = 0.05 + (i * 0.02);
+      lfoGain.gain.value = freq * 0.003;
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+      lfo.start();
+    });
+  } catch(e){ console.warn('Audio unavailable'); }
+}
+
+function playMusic(){
+  initAudio();
+  if(!audioCtx) return;
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+  gainNode.gain.setValueAtTime(gainNode.gain.value, audioCtx.currentTime);
+  gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 3);
+  musicPlaying = true;
+  updateMusicUI();
+}
+
+function pauseMusic(){
+  if(!audioCtx||!gainNode) return;
+  gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+  gainNode.gain.setValueAtTime(gainNode.gain.value, audioCtx.currentTime);
+  gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.5);
+  musicPlaying = false;
+  updateMusicUI();
+}
+
+function updateMusicUI(){
+  const bars  = document.getElementById('music-bars');
+  const play  = document.getElementById('icon-play');
+  const pause = document.getElementById('icon-pause');
+  if(musicPlaying){
+    bars.classList.remove('paused');
+    play.style.display  = 'none';
+    pause.style.display = '';
+  } else {
+    bars.classList.add('paused');
+    play.style.display  = '';
+    pause.style.display = 'none';
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   SWIPE / TOUCH HANDLING
+   ══════════════════════════════════════════════════════════ */
+function initTouchNavigation(){
+  const screen = document.getElementById('screen-stories');
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchStartTime = 0;
+
+  screen.addEventListener('touchstart', e=>{
+    if(e.touches.length > 1) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+
+    // Hold to pause
+    holdTimer = setTimeout(()=>{
+      pauseProgress();
+    }, 300);
+  }, {passive:true});
+
+  screen.addEventListener('touchend', e=>{
+    clearTimeout(holdTimer);
+    if(isHolding){ resumeProgress(); return; }
+
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    const dt = Date.now() - touchStartTime;
+
+    // Only swipe if horizontal dominant and fast
+    if(Math.abs(dx) > Math.abs(dy) && dt < 400 && Math.abs(dx) > 30){
+      if(dx < 0) nextSlide();
+      else prevSlide();
+    }
+  }, {passive:true});
+}
+
+/* ══════════════════════════════════════════════════════════
+   EVENT LISTENERS
+   ══════════════════════════════════════════════════════════ */
+
+// Intro tap → profiles
+document.getElementById('screen-intro').addEventListener('click', ()=>{
+  transitionTo('profiles');
 });
 
-app.addEventListener("touchstart", (event) => {
-  touchStartX = event.touches[0].clientX;
-}, { passive: true });
+// Profile selection
+document.querySelectorAll('.profile-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    const profile = card.dataset.profile;
+    const meta    = PROFILES[profile];
 
-app.addEventListener("touchend", (event) => {
-  const delta = event.changedTouches[0].clientX - touchStartX;
-  if (Math.abs(delta) < 44) return;
-  if (delta < 0) nextStory();
-  if (delta > 0) prevStory();
-}, { passive: true });
+    // Update story bar
+    document.getElementById('story-profile-name').textContent = meta.name;
+    document.getElementById('avatar-img').src = meta.img;
+    document.getElementById('avatar-img').alt = profile;
 
-window.addEventListener("keydown", (event) => {
-  if (event.key === "ArrowRight") nextStory();
-  if (event.key === "ArrowLeft") prevStory();
+    // Build & reset stories
+    buildSlides();
+    currentSlide = 0;
+
+    // Haptic feedback
+    if(navigator.vibrate) navigator.vibrate(12);
+
+    // Transition
+    const overlay = document.getElementById('transition-overlay');
+    overlay.classList.add('fade-in');
+    setTimeout(()=>{
+      showScreen('stories');
+      goToSlide(0);
+      // Show music player after a beat
+      setTimeout(()=>{
+        document.getElementById('music-player').classList.add('visible');
+      }, 800);
+      setTimeout(()=>{
+        overlay.classList.remove('fade-in');
+      }, 600);
+    }, 500);
+  });
 });
 
-createProgress();
-createAmbientParticles();
+// Tap prev/next
+document.getElementById('tap-prev').addEventListener('click', prevSlide);
+document.getElementById('tap-next').addEventListener('click', nextSlide);
+
+// Close stories
+document.getElementById('close-stories').addEventListener('click', ()=>{
+  clearAutoTimer();
+  transitionTo('profiles');
+  document.getElementById('music-player').classList.remove('visible');
+});
+
+// Music toggle
+document.getElementById('music-toggle').addEventListener('click', ()=>{
+  if(musicPlaying) pauseMusic();
+  else playMusic();
+});
+
+// Replay
+document.getElementById('replay-btn').addEventListener('click', ()=>{
+  document.getElementById('music-player').classList.remove('visible');
+  transitionTo('intro');
+  pauseMusic();
+});
+
+// Keyboard nav on desktop
+document.addEventListener('keydown', e=>{
+  if(currentScreen !== 'stories') return;
+  if(e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+  if(e.key === 'ArrowLeft') prevSlide();
+  if(e.key === 'Escape'){
+    clearAutoTimer();
+    transitionTo('profiles');
+  }
+});
+
+// Touch navigation
+initTouchNavigation();
+
+// Prevent pull-to-refresh on story screen
+document.getElementById('screen-stories').addEventListener('touchmove', e=>{
+  e.preventDefault();
+},{passive:false});
+
+/* ══════════════════════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════════════════════ */
+// Preload images
+const imageUrls = [
+  'images/idiot_dosa_story.jpg',
+  'images/funny_faces.jpg',
+  'images/closeup_cheek.jpg',
+  'images/mall_selfie.jpg'
+];
+imageUrls.forEach(url=>{
+  const img = new Image();
+  img.src = url;
+});
+
+// Build slides once on load (so they're ready)
+buildSlides();
