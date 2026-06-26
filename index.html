@@ -96,7 +96,7 @@
       <!-- SLIDE 1 — HERO -->
       <div class="slide slide-hero" data-index="0">
         <div class="slide-bg">
-          <img src="images/hero_fairy_light.jpg" alt="" class="slide-bg-img" />
+          <img src="images/hero_fairy_lights.jpg" alt="" class="slide-bg-img" onerror="this.onerror=null;this.src='images/hero_fairy_light.jpg'" />
           <div class="slide-bg-overlay overlay-deep"></div>
         </div>
         <div class="slide-content slide-content--center">
@@ -287,5 +287,13 @@
   <div class="transition-overlay" id="transition-overlay"></div>
 
   <script src="script.js"></script>
+  <script>
+    // Hide broken image icons gracefully — show dark bg instead
+    document.querySelectorAll('img').forEach(img => {
+      img.addEventListener('error', function() {
+        this.style.opacity = '0';
+      });
+    });
+  </script>
 </body>
 </html>
