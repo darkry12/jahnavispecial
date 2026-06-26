@@ -1,444 +1,341 @@
 'use strict';
 
-// ── STATE ─────────────────────────────────
-const state = {
-  currentSlide: 0,
-  totalSlides: 8,
-  isTransitioning: false,
-  musicPlaying: false,
-  profileSelected: null,
-  touchStartX: 0,
-  touchStartY: 0,
-  touchEndX: 0,
-  touchEndY: 0,
+/* ─── STATE ──────────────────────────── */
+const S = {
+  slide: 0, total: 8, busy: false,
+  music: false, profile: null,
+  tx0: 0, ty0: 0, tx1: 0, ty1: 0,
 };
 
-// ── DOM ───────────────────────────────────
-const $ = id => document.getElementById(id);
-const screenIntro     = $('screen-intro');
-const screenLoading   = $('screen-loading');
-const screenStory     = $('screen-story');
-const progressFill    = $('progress-fill');
-const slideCounter    = $('slide-counter');
-const dotNav          = $('dot-nav');
-const navPrev         = $('nav-prev');
-const navNext         = $('nav-next');
-const audio           = $('audio');
-const musicBtn        = $('music-btn');
-const musicPlayer     = $('music-player');
-const musicTooltip    = $('music-tooltip');
-const loadingBar      = document.querySelector('.loading-bar');
-const titleCardReveal = document.querySelector('.title-card-reveal');
-const titleCardName   = $('title-card-name');
-const loadingLabel    = $('loading-label');
-const overlay         = $('transition-overlay');
-const canvas          = $('particles-canvas');
+/* ─── REFS ───────────────────────────── */
+const el = id => document.getElementById(id);
+const sIntro   = el('screen-intro');
+const sLoad    = el('screen-loading');
+const sStory   = el('screen-story');
+const progFill = el('prog-fill');
+const counter  = el('story-counter');
+const dotRow   = el('dot-row');
+const navPrev  = el('nav-prev');
+const navNext  = el('nav-next');
+const audio    = el('audio');
+const mBtn     = el('music-btn');
+const mWrap    = el('music-wrap');
+const ldBar    = el('ld-bar');
+const ldCenter = document.querySelector('.ld-center');
+const ldLabel  = el('ld-label');
+const ldName   = el('ld-name');
+const fade     = el('fade-overlay');
+const canvas   = el('particle-canvas');
 
-// ── PARTICLES ─────────────────────────────
+/* ─── PARTICLES ──────────────────────── */
 const ctx = canvas ? canvas.getContext('2d') : null;
-let particles = [];
-let particleRAF = null;
-let particlesActive = false;
+let pts = [], pActive = false, pRAF = null;
 
-function initParticles() {
-  if (!canvas || !ctx) return;
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-}
-
-function resizeCanvas() {
+function pResize() {
+  if (!canvas) return;
   canvas.width  = window.innerWidth;
   canvas.height = window.innerHeight;
 }
-
-function spawnParticle() {
+function pNew() {
   return {
     x: Math.random() * canvas.width,
-    y: canvas.height + 10,
-    size: Math.random() * 1.8 + 0.4,
-    speedY: Math.random() * 0.6 + 0.3,
-    speedX: (Math.random() - 0.5) * 0.3,
-    opacity: 0,
-    maxOpacity: Math.random() * 0.45 + 0.1,
-    life: 0,
-    maxLife: Math.random() * 200 + 150,
+    y: canvas.height + 6,
+    r: Math.random() * 1.5 + 0.3,
+    vy: Math.random() * 0.55 + 0.25,
+    vx: (Math.random() - 0.5) * 0.25,
+    a: 0, maxA: Math.random() * 0.4 + 0.08,
+    life: 0, max: Math.random() * 200 + 140,
   };
 }
-
-function animateParticles() {
-  if (!ctx || !particlesActive) return;
+function pTick() {
+  if (!ctx || !pActive) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Add new particles
-  if (particles.length < 40 && Math.random() < 0.3) {
-    particles.push(spawnParticle());
-  }
-
-  particles = particles.filter(p => p.life < p.maxLife);
-
-  particles.forEach(p => {
-    p.life++;
-    p.y -= p.speedY;
-    p.x += p.speedX;
-
-    const progress = p.life / p.maxLife;
-    if (progress < 0.15) {
-      p.opacity = (progress / 0.15) * p.maxOpacity;
-    } else if (progress > 0.75) {
-      p.opacity = ((1 - progress) / 0.25) * p.maxOpacity;
-    } else {
-      p.opacity = p.maxOpacity;
-    }
-
+  if (pts.length < 35 && Math.random() < 0.28) pts.push(pNew());
+  pts = pts.filter(p => p.life < p.max);
+  pts.forEach(p => {
+    p.life++; p.y -= p.vy; p.x += p.vx;
+    const t = p.life / p.max;
+    p.a = t < .15 ? (t/.15)*p.maxA : t > .75 ? ((1-t)/.25)*p.maxA : p.maxA;
     ctx.save();
-    ctx.globalAlpha = p.opacity;
+    ctx.globalAlpha = p.a;
     ctx.fillStyle = '#c9a96e';
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   });
-
-  particleRAF = requestAnimationFrame(animateParticles);
+  pRAF = requestAnimationFrame(pTick);
 }
-
-function startParticles() {
-  if (particlesActive) return;
-  particlesActive = true;
-  canvas.classList.add('visible');
-  animateParticles();
+function pStart() {
+  if (pActive) return;
+  pActive = true;
+  canvas.classList.add('on');
+  pTick();
 }
-
-function stopParticles() {
-  particlesActive = false;
-  canvas.classList.remove('visible');
-  if (particleRAF) cancelAnimationFrame(particleRAF);
+function pStop() {
+  pActive = false;
+  canvas.classList.remove('on');
+  if (pRAF) cancelAnimationFrame(pRAF);
   if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particles = [];
+  pts = [];
 }
 
-// ── INTRO STARS ───────────────────────────
-function buildStars() {
-  const container = $('intro-stars');
-  if (!container) return;
-  for (let i = 0; i < 35; i++) {
-    const star = document.createElement('div');
-    star.className = 'star-dot';
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top  = Math.random() * 100 + '%';
-    const dur = (Math.random() * 8 + 5).toFixed(1) + 's';
-    const delay = (Math.random() * 6).toFixed(1) + 's';
-    star.style.animation = `starFloat ${dur} ${delay} linear infinite`;
-    container.appendChild(star);
-  }
-}
-
-// ── INIT ──────────────────────────────────
+/* ─── INIT ───────────────────────────── */
 function init() {
-  buildStars();
-  buildDotNav();
-  bindKeyboard();
+  pResize();
+  window.addEventListener('resize', pResize);
+  buildDots();
+  bindKeys();
   bindTouch();
-  initParticles();
   updateNav();
 }
 
-// ── PROFILE SELECTION ─────────────────────
+/* ─── PROFILE SELECT ─────────────────── */
 function selectProfile(card) {
-  if (state.profileSelected) return;
-  state.profileSelected = card.dataset.name;
-  card.classList.add('selected');
+  if (S.profile) return;
+  S.profile = card.dataset.name;
+  card.classList.add('sel');
 
-  const names = { Dosa: 'Dosa', Dumbo: 'Dumbo', Sleepyhead: 'Sleepyhead', Jahnavi: 'Jahnavi' };
-  titleCardName.textContent = names[state.profileSelected] || 'Jahnavi';
+  // map nicknames to "Jahnavi" on title card
+  ldName.textContent = S.profile;
 
-  // Fade out others
-  document.querySelectorAll('.profile-card').forEach(c => {
+  // fade others
+  document.querySelectorAll('.nf-card').forEach(c => {
     if (c !== card) {
-      c.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      c.style.transition = 'opacity .45s ease, transform .45s ease';
       c.style.opacity = '0';
-      c.style.transform = 'translateY(10px) scale(0.94)';
+      c.style.transform = 'translateY(8px) scale(.94)';
     }
   });
-
-  setTimeout(transitionToLoading, 750);
+  setTimeout(goLoad, 700);
 }
 
-// ── LOADING ───────────────────────────────
-function transitionToLoading() {
-  overlay.classList.add('active');
-
+/* ─── LOADING ────────────────────────── */
+function goLoad() {
+  fade.classList.add('on');
   setTimeout(() => {
-    screenIntro.classList.remove('active');
-    screenIntro.classList.add('exit');
-    screenLoading.classList.add('active');
-    overlay.classList.remove('active');
+    sIntro.classList.remove('active'); sIntro.classList.add('out');
+    sLoad.classList.add('active');
+    fade.classList.remove('on');
 
+    // trigger bar
     requestAnimationFrame(() => {
       setTimeout(() => {
-        loadingBar.style.width = '100%';
+        ldBar.style.width = '100%';
 
+        // show title card halfway
         setTimeout(() => {
-          titleCardReveal.classList.add('visible');
-          loadingLabel.style.opacity = '0';
+          ldCenter.classList.add('show');
+          ldLabel.style.opacity = '0';
           setTimeout(() => {
-            loadingLabel.textContent = 'Gathering your memories…';
-            loadingLabel.style.opacity = '1';
-          }, 300);
-        }, 700);
+            ldLabel.textContent = 'Gathering your memories…';
+            ldLabel.style.opacity = '1';
+          }, 350);
+        }, 750);
 
+        // enter story
         setTimeout(() => {
-          overlay.classList.add('active');
+          fade.classList.add('on');
           setTimeout(() => {
-            screenLoading.classList.remove('active');
-            screenLoading.classList.add('exit');
-            screenStory.classList.add('active');
+            sLoad.classList.remove('active'); sLoad.classList.add('out');
+            sStory.classList.add('active');
             activateSlide(0);
-            overlay.classList.remove('active');
-            startParticles();
-
-            setTimeout(() => {
-              musicPlayer.classList.add('visible');
-            }, 1000);
-          }, 400);
-        }, 3000);
+            fade.classList.remove('on');
+            pStart();
+            setTimeout(() => mWrap.classList.add('on'), 1200);
+          }, 380);
+        }, 3100);
       }, 80);
     });
-  }, 300);
+  }, 280);
 }
 
-// ── SLIDE NAVIGATION ─────────────────────
-function activateSlide(index) {
+/* ─── SLIDE CONTROL ──────────────────── */
+function activateSlide(idx) {
   const slides = document.querySelectorAll('.slide');
-
-  // Remove active/leaving from all
-  slides.forEach(s => {
-    s.classList.remove('active');
-    s.classList.remove('leaving');
-    // Reset all reveal-up/left so they re-animate
-    s.querySelectorAll('.reveal-up, .reveal-left').forEach(el => {
+  slides.forEach(sl => {
+    sl.classList.remove('active');
+    // Reset animations so they re-fire on re-entry
+    sl.querySelectorAll('.s1,.s2,.s3,.s4,.s5,.s6,.s7,.mem-item').forEach(el => {
       el.style.animation = 'none';
-      el.offsetHeight; // reflow
+      void el.offsetWidth; // reflow
       el.style.animation = '';
     });
   });
-
-  const target = slides[index];
-  if (!target) return;
-  target.classList.add('active');
-
-  state.currentSlide = index;
-  updateProgress();
+  const t = slides[idx];
+  if (!t) return;
+  t.classList.add('active');
+  S.slide = idx;
+  updateProg();
   updateCounter();
   updateDots();
   updateNav();
 }
 
 function nextSlide() {
-  if (state.isTransitioning) return;
-  if (state.currentSlide >= state.totalSlides - 1) return;
-
-  state.isTransitioning = true;
-  const next = state.currentSlide + 1;
-
-  overlay.classList.add('active');
+  if (S.busy || S.slide >= S.total - 1) return;
+  S.busy = true;
+  const n = S.slide + 1;
+  fade.classList.add('on');
   setTimeout(() => {
-    activateSlide(next);
-    overlay.classList.remove('active');
-    setTimeout(() => { state.isTransitioning = false; }, 350);
-  }, 220);
+    activateSlide(n);
+    fade.classList.remove('on');
+    setTimeout(() => S.busy = false, 320);
+  }, 210);
 }
 
 function prevSlide() {
-  if (state.isTransitioning) return;
-  if (state.currentSlide <= 0) return;
-
-  state.isTransitioning = true;
-  const prev = state.currentSlide - 1;
-
-  overlay.classList.add('active');
+  if (S.busy || S.slide <= 0) return;
+  S.busy = true;
+  const p = S.slide - 1;
+  fade.classList.add('on');
   setTimeout(() => {
-    activateSlide(prev);
-    overlay.classList.remove('active');
-    setTimeout(() => { state.isTransitioning = false; }, 350);
-  }, 220);
+    activateSlide(p);
+    fade.classList.remove('on');
+    setTimeout(() => S.busy = false, 320);
+  }, 210);
 }
 
-function goToSlide(index) {
-  if (state.isTransitioning || index === state.currentSlide) return;
-  state.isTransitioning = true;
-  overlay.classList.add('active');
+function gotoSlide(i) {
+  if (S.busy || i === S.slide) return;
+  S.busy = true;
+  fade.classList.add('on');
   setTimeout(() => {
-    activateSlide(index);
-    overlay.classList.remove('active');
-    setTimeout(() => { state.isTransitioning = false; }, 350);
-  }, 220);
+    activateSlide(i);
+    fade.classList.remove('on');
+    setTimeout(() => S.busy = false, 320);
+  }, 210);
 }
 
-// ── PROGRESS / UI ─────────────────────────
-function updateProgress() {
-  const pct = (state.currentSlide / (state.totalSlides - 1)) * 100;
-  progressFill.style.width = `${pct}%`;
+/* ─── UI UPDATES ─────────────────────── */
+function updateProg() {
+  progFill.style.width = (S.slide / (S.total - 1) * 100) + '%';
 }
-
 function updateCounter() {
-  slideCounter.textContent = `${state.currentSlide + 1} / ${state.totalSlides}`;
+  counter.textContent = (S.slide + 1) + ' / ' + S.total;
 }
-
 function updateNav() {
-  navPrev.classList.toggle('hidden', state.currentSlide === 0);
-  navNext.classList.toggle('hidden', state.currentSlide === state.totalSlides - 1);
+  navPrev.classList.toggle('hide', S.slide === 0);
+  navNext.classList.toggle('hide', S.slide === S.total - 1);
 }
 
-// ── DOTS ──────────────────────────────────
-function buildDotNav() {
-  dotNav.innerHTML = '';
-  for (let i = 0; i < state.totalSlides; i++) {
-    const dot = document.createElement('button');
-    dot.className = 'dot' + (i === 0 ? ' active' : '');
-    dot.setAttribute('aria-label', `Slide ${i + 1}`);
-    dot.addEventListener('click', () => goToSlide(i));
-    dotNav.appendChild(dot);
+function buildDots() {
+  dotRow.innerHTML = '';
+  for (let i = 0; i < S.total; i++) {
+    const b = document.createElement('button');
+    b.className = 'dot' + (i === 0 ? ' on' : '');
+    b.setAttribute('aria-label', 'Slide ' + (i + 1));
+    b.addEventListener('click', () => gotoSlide(i));
+    dotRow.appendChild(b);
   }
 }
-
 function updateDots() {
   document.querySelectorAll('.dot').forEach((d, i) => {
-    d.classList.toggle('active', i === state.currentSlide);
+    d.classList.toggle('on', i === S.slide);
   });
 }
 
-// ── KEYBOARD ──────────────────────────────
-function bindKeyboard() {
+/* ─── KEYBOARD ───────────────────────── */
+function bindKeys() {
   document.addEventListener('keydown', e => {
-    if (!screenStory.classList.contains('active')) return;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
-      e.preventDefault(); nextSlide();
-    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-      e.preventDefault(); prevSlide();
-    } else if (e.key === 'm' || e.key === 'M') {
-      toggleMusic();
-    }
+    if (!sStory.classList.contains('active')) return;
+    if ([' ', 'ArrowRight', 'ArrowDown'].includes(e.key)) { e.preventDefault(); nextSlide(); }
+    else if (['ArrowLeft', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prevSlide(); }
+    else if (e.key === 'm' || e.key === 'M') toggleMusic();
   });
 }
 
-// ── TOUCH / SWIPE ─────────────────────────
+/* ─── TOUCH ──────────────────────────── */
 function bindTouch() {
   document.body.addEventListener('touchstart', e => {
-    state.touchStartX = e.changedTouches[0].screenX;
-    state.touchStartY = e.changedTouches[0].screenY;
+    S.tx0 = e.changedTouches[0].screenX;
+    S.ty0 = e.changedTouches[0].screenY;
   }, { passive: true });
-
   document.body.addEventListener('touchend', e => {
-    state.touchEndX = e.changedTouches[0].screenX;
-    state.touchEndY = e.changedTouches[0].screenY;
-    const dx = state.touchEndX - state.touchStartX;
-    const dy = state.touchEndY - state.touchStartY;
-    if (!screenStory.classList.contains('active')) return;
-    if (Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx) * 1.5) return;
-    if (dx < 0) nextSlide(); else prevSlide();
+    S.tx1 = e.changedTouches[0].screenX;
+    S.ty1 = e.changedTouches[0].screenY;
+    if (!sStory.classList.contains('active')) return;
+    const dx = S.tx1 - S.tx0, dy = S.ty1 - S.ty0;
+    if (Math.abs(dx) < 38 || Math.abs(dy) > Math.abs(dx) * 1.4) return;
+    dx < 0 ? nextSlide() : prevSlide();
   }, { passive: true });
 }
 
-// ── MUSIC ─────────────────────────────────
+/* ─── SCROLL WHEEL ───────────────────── */
+let wt = null;
+document.addEventListener('wheel', e => {
+  if (!sStory.classList.contains('active')) return;
+  if (S.slide === S.total - 1) return; // let letter scroll
+  clearTimeout(wt);
+  wt = setTimeout(() => {
+    if (e.deltaY > 35) nextSlide();
+    else if (e.deltaY < -35) prevSlide();
+  }, 45);
+}, { passive: true });
+
+/* ─── MUSIC ──────────────────────────── */
 function toggleMusic() {
-  if (state.musicPlaying) {
+  if (S.music) {
     audio.pause();
-    musicBtn.classList.remove('playing');
-    musicTooltip.textContent = 'Play music';
-    state.musicPlaying = false;
+    mBtn.classList.remove('play');
+    S.music = false;
   } else {
     audio.volume = 0;
     audio.play().then(() => {
-      musicBtn.classList.add('playing');
-      musicTooltip.textContent = 'Pause music';
-      state.musicPlaying = true;
-      fadeIn(audio, 0.7, 1200);
+      mBtn.classList.add('play');
+      S.music = true;
+      fadeVol(audio, 0.72, 1400);
     }).catch(() => {});
   }
 }
 
-function fadeIn(audioEl, targetVol, duration) {
-  const steps = 30;
-  const step = targetVol / steps;
-  let current = 0;
-  const interval = setInterval(() => {
-    current += step;
-    audioEl.volume = Math.min(current, targetVol);
-    if (current >= targetVol) clearInterval(interval);
-  }, duration / steps);
+function fadeVol(a, target, ms) {
+  const steps = 28, step = target / steps;
+  let cur = 0;
+  const iv = setInterval(() => {
+    cur = Math.min(cur + step, target);
+    a.volume = cur;
+    if (cur >= target) clearInterval(iv);
+  }, ms / steps);
 }
 
-audio.addEventListener('pause', () => {
-  musicBtn.classList.remove('playing');
-  musicTooltip.textContent = 'Play music';
-  state.musicPlaying = false;
-});
-audio.addEventListener('play', () => {
-  musicBtn.classList.add('playing');
-  musicTooltip.textContent = 'Pause music';
-  state.musicPlaying = true;
-});
+audio.addEventListener('pause', () => { mBtn.classList.remove('play'); S.music = false; });
+audio.addEventListener('play',  () => { mBtn.classList.add('play');    S.music = true;  });
 
-// ── SCROLL WHEEL ──────────────────────────
-let wheelTimeout = null;
-document.addEventListener('wheel', e => {
-  if (!screenStory.classList.contains('active')) return;
-  if (state.currentSlide === state.totalSlides - 1) return;
-  clearTimeout(wheelTimeout);
-  wheelTimeout = setTimeout(() => {
-    if (e.deltaY > 40) nextSlide();
-    else if (e.deltaY < -40) prevSlide();
-  }, 50);
-}, { passive: true });
-
-// ── RESTART ───────────────────────────────
+/* ─── RESTART ────────────────────────── */
 function restartExperience() {
-  overlay.classList.add('active');
-
+  fade.classList.add('on');
   setTimeout(() => {
-    state.currentSlide = 0;
-    state.profileSelected = null;
-    state.isTransitioning = false;
+    S.slide = 0; S.profile = null; S.busy = false;
+    if (S.music) { audio.pause(); audio.currentTime = 0; mBtn.classList.remove('play'); S.music = false; }
+    pStop();
 
-    if (state.musicPlaying) {
-      audio.pause(); audio.currentTime = 0;
-      musicBtn.classList.remove('playing');
-      state.musicPlaying = false;
-    }
+    ldBar.style.transition = 'none'; ldBar.style.width = '0';
+    ldCenter.classList.remove('show');
+    ldLabel.textContent = 'Preparing something special…';
+    ldLabel.style.opacity = '1';
 
-    stopParticles();
-
-    loadingBar.style.transition = 'none';
-    loadingBar.style.width = '0';
-    titleCardReveal.classList.remove('visible');
-    loadingLabel.textContent = 'Preparing something special…';
-    loadingLabel.style.opacity = '1';
-
-    document.querySelectorAll('.profile-card').forEach(c => {
-      c.classList.remove('selected');
+    document.querySelectorAll('.nf-card').forEach(c => {
+      c.classList.remove('sel');
       c.style.opacity = ''; c.style.transform = ''; c.style.transition = '';
     });
 
-    screenStory.classList.remove('active'); screenStory.classList.add('exit');
-    screenLoading.classList.remove('active'); screenLoading.classList.add('exit');
-    musicPlayer.classList.remove('visible');
-    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    sStory.classList.remove('active'); sStory.classList.add('out');
+    sLoad.classList.remove('active'); sLoad.classList.add('out');
+    mWrap.classList.remove('on');
+    document.querySelectorAll('.slide').forEach(sl => sl.classList.remove('active'));
 
     setTimeout(() => {
-      screenStory.classList.remove('exit');
-      screenLoading.classList.remove('exit');
-      screenIntro.classList.remove('exit');
-      screenIntro.classList.add('active');
-      overlay.classList.remove('active');
-
+      sStory.classList.remove('out'); sLoad.classList.remove('out');
+      sIntro.classList.remove('out'); sIntro.classList.add('active');
+      fade.classList.remove('on');
       setTimeout(() => {
-        loadingBar.style.transition = 'width 2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-      }, 100);
+        ldBar.style.transition = 'width 2.8s cubic-bezier(.25,.46,.45,.94)';
+      }, 120);
     }, 300);
-  }, 400);
+  }, 380);
 }
 
-// ── BOOT ──────────────────────────────────
+/* ─── BOOT ───────────────────────────── */
 document.addEventListener('DOMContentLoaded', init);
 
