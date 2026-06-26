@@ -11,54 +11,62 @@
 </head>
 <body>
 
+  <!-- CANVAS for particles -->
+  <canvas id="particles-canvas"></canvas>
+
   <!-- ══════════════════════════════════════════
        SCREEN 0 — NETFLIX PROFILE SELECTOR
   ══════════════════════════════════════════ -->
   <div id="screen-intro" class="screen screen-intro active">
     <div class="intro-bg-grain"></div>
+    <div class="intro-stars" id="intro-stars"></div>
     <div class="intro-content">
-      <div class="intro-eyebrow">A private screening for one</div>
+      <div class="intro-eyebrow">A private film, made just for you</div>
       <h1 class="intro-heading">Who's watching?</h1>
       <div class="profile-grid">
 
         <div class="profile-card" data-name="Dosa" onclick="selectProfile(this)">
           <div class="profile-img-wrap">
-            <img src="images/idiot_dosa_story.jpg" alt="Dosa" />
+            <img src="images/idiot_dosa_story.jpg" alt="Dosa" onerror="this.style.opacity='0'" />
             <div class="profile-glow"></div>
+            <div class="profile-shimmer"></div>
           </div>
           <span class="profile-label">Dosa</span>
-          <span class="profile-sub">The one who eats and runs</span>
+          <span class="profile-sub">🫶 The smiley one</span>
         </div>
 
         <div class="profile-card" data-name="Dumbo" onclick="selectProfile(this)">
           <div class="profile-img-wrap">
-            <img src="images/funny_faces.jpg" alt="Dumbo" />
+            <img src="images/funny_faces.jpg" alt="Dumbo" onerror="this.style.opacity='0'" />
             <div class="profile-glow"></div>
+            <div class="profile-shimmer"></div>
           </div>
           <span class="profile-label">Dumbo</span>
-          <span class="profile-sub">IQ: present, barely</span>
+          <span class="profile-sub">🌸 The silly one</span>
         </div>
 
         <div class="profile-card" data-name="Sleepyhead" onclick="selectProfile(this)">
           <div class="profile-img-wrap">
-            <img src="images/closeup_cheek.jpg" alt="Sleepyhead" />
+            <img src="images/closeup_cheek.jpg" alt="Sleepyhead" onerror="this.style.opacity='0'" />
             <div class="profile-glow"></div>
+            <div class="profile-shimmer"></div>
           </div>
           <span class="profile-label">Sleepyhead</span>
-          <span class="profile-sub">Napping professionally</span>
+          <span class="profile-sub">🌙 The cute one</span>
         </div>
 
-        <div class="profile-card" data-name="Idiot" onclick="selectProfile(this)">
+        <div class="profile-card" data-name="Jahnavi" onclick="selectProfile(this)">
           <div class="profile-img-wrap">
-            <img src="images/mall_selfie.jpg" alt="Idiot" />
+            <img src="images/mall_selfie.jpg" alt="Jahnavi" onerror="this.style.opacity='0'" />
             <div class="profile-glow"></div>
+            <div class="profile-shimmer"></div>
           </div>
-          <span class="profile-label">Idiot</span>
-          <span class="profile-sub">My favourite one</span>
+          <span class="profile-label">Jahnavi</span>
+          <span class="profile-sub">✨ My favourite person</span>
         </div>
 
       </div>
-      <p class="intro-hint">tap any card to begin</p>
+      <p class="intro-hint">tap your name to begin</p>
     </div>
   </div>
 
@@ -69,11 +77,11 @@
     <div class="loading-bar-wrap">
       <div class="loading-bar"></div>
     </div>
-    <div class="loading-label" id="loading-label">Loading your memories…</div>
+    <div class="loading-label" id="loading-label">Preparing something special…</div>
     <div class="title-card-reveal">
-      <div class="title-card-year">2020 — Present</div>
+      <div class="title-card-year">Made with love &nbsp;·&nbsp; 2024</div>
       <h2 class="title-card-name" id="title-card-name">Jahnavi</h2>
-      <div class="title-card-tagline">A film about the most annoying, wonderful person I know.</div>
+      <div class="title-card-tagline">A little film about someone who means the world to me.</div>
     </div>
   </div>
 
@@ -96,30 +104,45 @@
       <!-- SLIDE 1 — HERO -->
       <div class="slide slide-hero" data-index="0">
         <div class="slide-bg">
-          <img src="images/hero_fairy_lights.jpg" alt="" class="slide-bg-img" onerror="this.onerror=null;this.src='images/hero_fairy_light.jpg'" />
+          <img src="images/hero_fairy_lights.jpg" alt="" class="slide-bg-img kenburns"
+               onerror="this.onerror=null;this.src='images/hero_fairy_light.jpg'" />
           <div class="slide-bg-overlay overlay-deep"></div>
+          <div class="slide-vignette"></div>
         </div>
         <div class="slide-content slide-content--center">
-          <div class="slide-eyebrow mono">Chapter One</div>
-          <h2 class="slide-title display-xl">The one who<br/><em>showed up.</em></h2>
-          <p class="slide-caption">Not every friendship starts with a grand moment.<br/>Some start with someone just… being there.<br/>Annoyingly, consistently there.</p>
+          <div class="anim-wrap">
+            <div class="slide-eyebrow mono reveal-up">Just for you</div>
+            <h2 class="slide-title display-xl reveal-up delay-1">You are<br/><em>someone special.</em></h2>
+            <p class="slide-caption reveal-up delay-2">
+              Not everyone gets a film made for them.<br/>
+              But you — you earned this one.<br/>
+              Just by being you.
+            </p>
+            <div class="hero-line reveal-up delay-3"></div>
+          </div>
         </div>
-        <div class="slide-scroll-hint">↓</div>
+        <div class="slide-scroll-hint reveal-up delay-4">scroll or tap →</div>
       </div>
 
-      <!-- SLIDE 2 — WHITE DRESS -->
+      <!-- SLIDE 2 — WHITE DRESS / EXHIBIT A -->
       <div class="slide slide-portrait" data-index="1">
         <div class="slide-bg">
-          <img src="images/white_dress.jpg" alt="" class="slide-bg-img" />
+          <img src="images/white_dress.jpg" alt="" class="slide-bg-img kenburns-slow" onerror="this.style.opacity='0'" />
           <div class="slide-bg-overlay overlay-left"></div>
         </div>
         <div class="slide-content slide-content--left">
-          <div class="slide-eyebrow mono">Exhibit A</div>
-          <h2 class="slide-title display-lg">The effort<br/>she makes.</h2>
-          <p class="slide-caption">When she actually gets ready, she looks like<br/>she should be on a mood board somewhere.<br/>Then she opens her mouth and ruins it.</p>
-          <div class="slide-stat-card">
-            <span class="stat-number">10</span>
-            <span class="stat-label">out of 10<br/>would still be friends</span>
+          <div class="anim-wrap">
+            <div class="slide-eyebrow mono reveal-up">You in this</div>
+            <h2 class="slide-title display-lg reveal-up delay-1">The way<br/>you look.</h2>
+            <p class="slide-caption reveal-up delay-2">
+              There are moments when you walk in somewhere<br/>
+              and I think — she has no idea, does she?<br/>
+              No idea how beautiful she actually is.<br/>
+              This photo is proof.
+            </p>
+            <div class="slide-quote-card reveal-up delay-3">
+              <span class="quote-text">"She doesn't even try, and she still looks like that."</span>
+            </div>
           </div>
         </div>
       </div>
@@ -127,118 +150,151 @@
       <!-- SLIDE 3 — SAREE SMILE -->
       <div class="slide slide-portrait" data-index="2">
         <div class="slide-bg">
-          <img src="images/saree_smile.jpg" alt="" class="slide-bg-img slide-bg-img--right" />
+          <img src="images/saree_smile.jpg" alt="" class="slide-bg-img kenburns-slow" onerror="this.style.opacity='0'" />
           <div class="slide-bg-overlay overlay-right"></div>
         </div>
         <div class="slide-content slide-content--right">
-          <div class="slide-eyebrow mono">The smile</div>
-          <h2 class="slide-title display-lg">That laugh<br/>though.</h2>
-          <p class="slide-caption">The kind that fills up a room.<br/>The kind that's impossible to fake.<br/>The kind that makes everyone else start laughing too<br/>even when the joke wasn't that funny.</p>
+          <div class="anim-wrap">
+            <div class="slide-eyebrow mono reveal-up">Your smile</div>
+            <h2 class="slide-title display-lg reveal-up delay-1">This smile<br/>is everything.</h2>
+            <p class="slide-caption reveal-up delay-2">
+              Whenever you smile like this —<br/>
+              genuinely, fully, without thinking about it —<br/>
+              the whole room feels different.<br/>
+              I hope you know that.
+            </p>
+          </div>
         </div>
       </div>
 
-      <!-- SLIDE 4 — CLOSEUP / ROAST CARD -->
+      <!-- SLIDE 4 — EMOTIONAL APPRECIATION (replaced roast list) -->
       <div class="slide slide-centered" data-index="3">
-        <div class="slide-bg slide-bg--color bg-dark-warm"></div>
+        <div class="slide-bg slide-bg--color bg-dark-warm">
+          <div class="floating-orb orb-1"></div>
+          <div class="floating-orb orb-2"></div>
+          <div class="floating-orb orb-3"></div>
+        </div>
         <div class="slide-content slide-content--center">
-          <div class="slide-eyebrow mono">An honest assessment</div>
-          <h2 class="slide-title display-lg">Things she is<br/><em>terrible</em> at.</h2>
-          <div class="roast-list">
-            <div class="roast-item">
-              <span class="roast-num mono">01</span>
-              <span>Being on time. To anything. Ever.</span>
-            </div>
-            <div class="roast-item">
-              <span class="roast-num mono">02</span>
-              <span>Replying to texts within the same century.</span>
-            </div>
-            <div class="roast-item">
-              <span class="roast-num mono">03</span>
-              <span>Pretending she's "almost ready" when she hasn't even started.</span>
-            </div>
-            <div class="roast-item">
-              <span class="roast-num mono">04</span>
-              <span>Making decisions. Any decisions. What do you want to eat, Jahnavi?</span>
-            </div>
-            <div class="roast-item">
-              <span class="roast-num mono">05</span>
-              <span>Staying awake past 10pm like a functioning adult.</span>
+          <div class="anim-wrap">
+            <div class="slide-eyebrow mono reveal-up">Things I know for sure</div>
+            <h2 class="slide-title display-lg reveal-up delay-1">What makes<br/><em>you, you.</em></h2>
+            <div class="memory-list">
+              <div class="memory-item reveal-left delay-1">
+                <span class="memory-icon">🌸</span>
+                <span>You make everyone around you feel comfortable without even trying.</span>
+              </div>
+              <div class="memory-item reveal-left delay-2">
+                <span class="memory-icon">✨</span>
+                <span>Your laugh is contagious. Like genuinely, once you start — everyone starts.</span>
+              </div>
+              <div class="memory-item reveal-left delay-3">
+                <span class="memory-icon">🤍</span>
+                <span>You care so deeply about people. Even when you pretend you don't.</span>
+              </div>
+              <div class="memory-item reveal-left delay-4">
+                <span class="memory-icon">🌙</span>
+                <span>You are the kind of person that is impossible to forget.</span>
+              </div>
+              <div class="memory-item reveal-left delay-5">
+                <span class="memory-icon">💫</span>
+                <span>And honestly? You have no idea how much you mean to people. That part still gets me.</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- SLIDE 5 — FUNNY FACES / NAVRATRI -->
+      <!-- SLIDE 5 — NAVRATRI MIRROR -->
       <div class="slide slide-diptych" data-index="4">
         <div class="slide-bg">
-          <img src="images/navratri_mirror.jpg" alt="" class="slide-bg-img" />
+          <img src="images/navratri_mirror.jpg" alt="" class="slide-bg-img kenburns" onerror="this.style.opacity='0'" />
           <div class="slide-bg-overlay overlay-deep"></div>
         </div>
         <div class="slide-content slide-content--center">
-          <div class="slide-eyebrow mono">Navratri era</div>
-          <h2 class="slide-title display-lg">Professional<br/>chaos in a<br/>mirror selfie.</h2>
-          <p class="slide-caption">She looked incredible. She knew it.<br/>She made sure everyone knew she knew it.<br/>Honestly? Valid.</p>
+          <div class="anim-wrap">
+            <div class="slide-eyebrow mono reveal-up">Navratri ✨</div>
+            <h2 class="slide-title display-lg reveal-up delay-1">You looked<br/>so happy<br/>that day.</h2>
+            <p class="slide-caption reveal-up delay-2">
+              I love this photo because of your eyes.<br/>
+              There's this pure joy in them.<br/>
+              That's the version of you I always want to remember.
+            </p>
+          </div>
         </div>
       </div>
 
-      <!-- SLIDE 6 — THE HUG -->
+      <!-- SLIDE 6 — BESTFRIEND HUG -->
       <div class="slide slide-hero" data-index="5">
         <div class="slide-bg">
-          <img src="images/bestfriend_hug.jpg" alt="" class="slide-bg-img" />
+          <img src="images/bestfriend_hug.jpg" alt="" class="slide-bg-img kenburns-slow" onerror="this.style.opacity='0'" />
           <div class="slide-bg-overlay overlay-deep"></div>
         </div>
         <div class="slide-content slide-content--center">
-          <div class="slide-eyebrow mono">The real thing</div>
-          <h2 class="slide-title display-xl">This one.<br/><em>Always.</em></h2>
-          <p class="slide-caption">There's no version of the good memories<br/>where she isn't in them.</p>
+          <div class="anim-wrap">
+            <div class="slide-eyebrow mono reveal-up">Us</div>
+            <h2 class="slide-title display-xl reveal-up delay-1">This hug.<br/><em>This moment.</em></h2>
+            <p class="slide-caption reveal-up delay-2">
+              This is what I'll always hold onto.<br/>
+              Not the photos, not the places —<br/>
+              just this. Us. Together.
+            </p>
+            <div class="heart-pulse reveal-up delay-3">🤍</div>
+          </div>
         </div>
       </div>
 
-      <!-- SLIDE 7 — DOSA STORY -->
+      <!-- SLIDE 7 — HER CUTENESS (replaced dosa) -->
       <div class="slide slide-portrait" data-index="6">
         <div class="slide-bg">
-          <img src="images/idiot_dosa_story.jpg" alt="" class="slide-bg-img" />
+          <img src="images/idiot_dosa_story.jpg" alt="" class="slide-bg-img kenburns-slow" onerror="this.style.opacity='0'" />
           <div class="slide-bg-overlay overlay-left"></div>
         </div>
         <div class="slide-content slide-content--left">
-          <div class="slide-eyebrow mono">The dosa incident</div>
-          <h2 class="slide-title display-lg">I cannot<br/>believe her.</h2>
-          <p class="slide-caption">She ordered a dosa. Took two bites.<br/>Declared she was "done."<br/>This is the person I chose. This is my life now.</p>
-          <div class="slide-stat-card">
-            <span class="stat-number">2</span>
-            <span class="stat-label">bites.<br/>two. bites.</span>
+          <div class="anim-wrap">
+            <div class="slide-eyebrow mono reveal-up">Can we talk about</div>
+            <h2 class="slide-title display-lg reveal-up delay-1">How are<br/>you this<br/>cute?</h2>
+            <p class="slide-caption reveal-up delay-2">
+              Like genuinely — I don't understand it.<br/>
+              You make the most normal expressions<br/>
+              and somehow they're adorable every single time.<br/>
+              It's a little unfair, honestly.
+            </p>
+            <div class="slide-quote-card reveal-up delay-3">
+              <span class="quote-text">"Stop being this cute. It's too much."</span>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- SLIDE 8 — FINAL LETTER -->
       <div class="slide slide-letter" data-index="7">
-        <div class="slide-bg slide-bg--color bg-dark-letter"></div>
+        <div class="slide-bg slide-bg--color bg-dark-letter">
+          <div class="floating-orb orb-letter-1"></div>
+          <div class="floating-orb orb-letter-2"></div>
+        </div>
         <div class="slide-content slide-content--letter">
-          <div class="slide-eyebrow mono">And finally —</div>
-          <h2 class="letter-heading">The part I actually<br/>mean.</h2>
+          <div class="slide-eyebrow mono reveal-up">And finally —</div>
+          <h2 class="letter-heading reveal-up delay-1">The part I<br/>really mean.</h2>
 
-          <div class="letter-body">
-            <p>Okay. I'm going to be real for a second, which is uncomfortable for me so bear with it.</p>
+          <div class="letter-body reveal-up delay-2">
+            <p>I made this because I wanted you to feel something real today.</p>
 
-            <p>You're one of the most annoying people I've ever been friends with. You take forever to get ready, you have strong opinions about everything except what to eat for dinner, and you will send me a 7-minute voice note when a single text would have been fine.</p>
+            <p>I don't say things like this out loud very often. Maybe because words feel too small sometimes. But I figured — at least once — you deserve to read all of it in one place.</p>
 
-            <p>And yet.</p>
+            <p>You are one of those rare people who just makes life better. Not because you're perfect or because everything is always okay — but because you're genuinely, completely yourself. And that version of you is someone I feel lucky to know.</p>
 
-            <p>You're also the person I want to tell things to first. The one who laughs at the same dumb stuff I do. The one who shows up — actually shows up — when it matters. Not with advice, not with a solution, just with presence. That's rarer than you think.</p>
+            <p>You've been there in ways that mattered. Quietly, without making it a big thing. That's the part that gets me the most — you don't even realise how much you do for the people around you.</p>
 
-            <p>I've watched you grow into someone who knows who she is and doesn't apologise for it. That's not nothing. That's actually really hard. You've done it in a way that's somehow still warm and funny and completely yourself.</p>
+            <p>I've watched you go through things that weren't easy, and I've watched you come out of them still smiling, still warm, still you. That's not small. That's actually everything.</p>
 
-            <p>I don't say this kind of thing often. Mostly because I'd never let you live it down. But you deserve to hear it in full, somewhere, at least once:</p>
+            <p class="letter-emphasis">You are loved. More than you know. More than you let yourself believe.</p>
 
-            <p class="letter-emphasis">You matter. A lot. Specifically to me.</p>
+            <p>Thank you for being in my life. Genuinely, from the bottom of my heart — thank you.</p>
 
-            <p>Thanks for being my person. You absolute idiot.</p>
-
-            <p class="letter-sign">— Always,<br/>Your best friend 🤍</p>
+            <p class="letter-sign">— With so much love,<br/>Your person 🤍</p>
           </div>
 
-          <div class="letter-footer">
+          <div class="letter-footer reveal-up delay-3">
             <button class="replay-btn" onclick="restartExperience()">
               <span>↺</span> Watch again
             </button>
@@ -265,19 +321,18 @@
 
   </div><!-- /screen-story -->
 
-  <!-- ══════════════════════════════════════════
-       MUSIC PLAYER
-  ══════════════════════════════════════════ -->
+  <!-- MUSIC PLAYER -->
   <div class="music-player" id="music-player">
     <audio id="audio" loop>
       <source src="audio/song.mp3" type="audio/mpeg" />
     </audio>
     <button class="music-btn" id="music-btn" onclick="toggleMusic()" aria-label="Play/Pause music">
       <div class="music-vinyl" id="music-vinyl">
+        <div class="vinyl-ring"></div>
         <div class="vinyl-center"></div>
       </div>
       <div class="music-wave" id="music-wave">
-        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
       </div>
     </button>
     <div class="music-tooltip" id="music-tooltip">Play music</div>
@@ -287,13 +342,5 @@
   <div class="transition-overlay" id="transition-overlay"></div>
 
   <script src="script.js"></script>
-  <script>
-    // Hide broken image icons gracefully — show dark bg instead
-    document.querySelectorAll('img').forEach(img => {
-      img.addEventListener('error', function() {
-        this.style.opacity = '0';
-      });
-    });
-  </script>
 </body>
 </html>
