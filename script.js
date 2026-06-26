@@ -7,25 +7,11 @@ const S = {
   tx0: 0, ty0: 0, tx1: 0, ty1: 0,
 };
 
-/* ─── REFS ───────────────────────────── */
+/* ─── REFS (assigned inside init after DOM is ready) ── */
 const el = id => document.getElementById(id);
-const sIntro   = el('screen-intro');
-const sLoad    = el('screen-loading');
-const sStory   = el('screen-story');
-const progFill = el('prog-fill');
-const counter  = el('story-counter');
-const dotRow   = el('dot-row');
-const navPrev  = el('nav-prev');
-const navNext  = el('nav-next');
-const audio    = el('audio');
-const mBtn     = el('music-btn');
-const mWrap    = el('music-wrap');
-const ldBar    = el('ld-bar');
-const ldCenter = document.querySelector('.ld-center');
-const ldLabel  = el('ld-label');
-const ldName   = el('ld-name');
-const fade     = el('fade-overlay');
-const canvas   = el('particle-canvas');
+let sIntro, sLoad, sStory, progFill, counter, dotRow,
+    navPrev, navNext, audio, mBtn, mWrap, ldBar,
+    ldCenter, ldLabel, ldName, fade, canvas;
 
 /* ─── PARTICLES ──────────────────────── */
 const ctx = canvas ? canvas.getContext('2d') : null;
@@ -82,8 +68,42 @@ function pStop() {
 
 /* ─── INIT ───────────────────────────── */
 function init() {
+  // Assign all DOM refs now that DOM is ready
+  sIntro   = el('screen-intro');
+  sLoad    = el('screen-loading');
+  sStory   = el('screen-story');
+  progFill = el('prog-fill');
+  counter  = el('story-counter');
+  dotRow   = el('dot-row');
+  navPrev  = el('nav-prev');
+  navNext  = el('nav-next');
+  audio    = el('audio');
+  mBtn     = el('music-btn');
+  mWrap    = el('music-wrap');
+  ldBar    = el('ld-bar');
+  ldCenter = document.querySelector('.ld-center');
+  ldLabel  = el('ld-label');
+  ldName   = el('ld-name');
+  fade     = el('fade-overlay');
+  canvas   = el('particle-canvas');
+
   pResize();
   window.addEventListener('resize', pResize);
+
+  // Profile cards via event delegation - works on all browsers and iOS
+  const grid = document.querySelector('.nf-grid');
+  if (grid) {
+    grid.addEventListener('click', function(e) {
+      const card = e.target.closest('.nf-card');
+      if (card) selectProfile(card);
+    });
+    // explicit touchend for iOS Safari
+    grid.addEventListener('touchend', function(e) {
+      const card = e.target.closest('.nf-card');
+      if (card) { e.preventDefault(); selectProfile(card); }
+    }, { passive: false });
+  }
+
   buildDots();
   bindKeys();
   bindTouch();
@@ -338,4 +358,3 @@ function restartExperience() {
 
 /* ─── BOOT ───────────────────────────── */
 document.addEventListener('DOMContentLoaded', init);
-
