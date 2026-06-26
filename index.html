@@ -1,346 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>For Jahnavi</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Inter:wght@300;400;500;600&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-  <!-- CANVAS for particles -->
-  <canvas id="particles-canvas"></canvas>
+<canvas id="particle-canvas"></canvas>
 
-  <!-- ══════════════════════════════════════════
-       SCREEN 0 — NETFLIX PROFILE SELECTOR
-  ══════════════════════════════════════════ -->
-  <div id="screen-intro" class="screen screen-intro active">
-    <div class="intro-bg-grain"></div>
-    <div class="intro-stars" id="intro-stars"></div>
-    <div class="intro-content">
-      <div class="intro-eyebrow">A private film, made just for you</div>
-      <h1 class="intro-heading">Who's watching?</h1>
-      <div class="profile-grid">
+<!-- ═══════════════════════════
+     SCREEN: PROFILE SELECTOR
+═══════════════════════════ -->
+<div id="screen-intro" class="screen active">
+  <div class="nf-bg"></div>
+  <div class="nf-logo">J</div>
 
-        <div class="profile-card" data-name="Dosa" onclick="selectProfile(this)">
-          <div class="profile-img-wrap">
-            <img src="images/idiot_dosa_story.jpg" alt="Dosa" onerror="this.style.opacity='0'" />
-            <div class="profile-glow"></div>
-            <div class="profile-shimmer"></div>
-          </div>
-          <span class="profile-label">Dosa</span>
-          <span class="profile-sub">🫶 The smiley one</span>
+  <div class="nf-body">
+    <p class="nf-who">Who's watching?</p>
+
+    <div class="nf-grid">
+
+      <button class="nf-card" data-name="Dosa" onclick="selectProfile(this)">
+        <div class="nf-card-img">
+          <img src="images/idiot_dosa_story.jpg" alt="Dosa" onerror="this.style.display='none'"/>
+          <div class="nf-card-overlay"></div>
         </div>
+        <span class="nf-card-name">Dosa</span>
+        <span class="nf-card-sub">The smiley one 🫶</span>
+      </button>
 
-        <div class="profile-card" data-name="Dumbo" onclick="selectProfile(this)">
-          <div class="profile-img-wrap">
-            <img src="images/funny_faces.jpg" alt="Dumbo" onerror="this.style.opacity='0'" />
-            <div class="profile-glow"></div>
-            <div class="profile-shimmer"></div>
-          </div>
-          <span class="profile-label">Dumbo</span>
-          <span class="profile-sub">🌸 The silly one</span>
+      <button class="nf-card" data-name="Dumbo" onclick="selectProfile(this)">
+        <div class="nf-card-img">
+          <img src="images/funny_faces.jpg" alt="Dumbo" onerror="this.style.display='none'"/>
+          <div class="nf-card-overlay"></div>
         </div>
+        <span class="nf-card-name">Dumbo</span>
+        <span class="nf-card-sub">The silly one 🌸</span>
+      </button>
 
-        <div class="profile-card" data-name="Sleepyhead" onclick="selectProfile(this)">
-          <div class="profile-img-wrap">
-            <img src="images/closeup_cheek.jpg" alt="Sleepyhead" onerror="this.style.opacity='0'" />
-            <div class="profile-glow"></div>
-            <div class="profile-shimmer"></div>
-          </div>
-          <span class="profile-label">Sleepyhead</span>
-          <span class="profile-sub">🌙 The cute one</span>
+      <button class="nf-card" data-name="Sleepyhead" onclick="selectProfile(this)">
+        <div class="nf-card-img">
+          <img src="images/closeup_cheek.jpg" alt="Sleepyhead" onerror="this.style.display='none'"/>
+          <div class="nf-card-overlay"></div>
         </div>
+        <span class="nf-card-name">Sleepyhead</span>
+        <span class="nf-card-sub">The cute one 🌙</span>
+      </button>
 
-        <div class="profile-card" data-name="Jahnavi" onclick="selectProfile(this)">
-          <div class="profile-img-wrap">
-            <img src="images/mall_selfie.jpg" alt="Jahnavi" onerror="this.style.opacity='0'" />
-            <div class="profile-glow"></div>
-            <div class="profile-shimmer"></div>
-          </div>
-          <span class="profile-label">Jahnavi</span>
-          <span class="profile-sub">✨ My favourite person</span>
+      <button class="nf-card" data-name="Jahnavi" onclick="selectProfile(this)">
+        <div class="nf-card-img">
+          <img src="images/mall_selfie.jpg" alt="Jahnavi" onerror="this.style.display='none'"/>
+          <div class="nf-card-overlay"></div>
         </div>
+        <span class="nf-card-name">Jahnavi</span>
+        <span class="nf-card-sub">My favourite ✨</span>
+      </button>
 
-      </div>
-      <p class="intro-hint">tap your name to begin</p>
     </div>
+
+    <p class="nf-hint">tap your name to begin</p>
   </div>
+</div>
 
-  <!-- ══════════════════════════════════════════
-       LOADING / TITLE CARD
-  ══════════════════════════════════════════ -->
-  <div id="screen-loading" class="screen screen-loading">
-    <div class="loading-bar-wrap">
-      <div class="loading-bar"></div>
-    </div>
-    <div class="loading-label" id="loading-label">Preparing something special…</div>
-    <div class="title-card-reveal">
-      <div class="title-card-year">Made with love &nbsp;·&nbsp; 2024</div>
-      <h2 class="title-card-name" id="title-card-name">Jahnavi</h2>
-      <div class="title-card-tagline">A little film about someone who means the world to me.</div>
-    </div>
+<!-- ═══════════════════════════
+     SCREEN: LOADING
+═══════════════════════════ -->
+<div id="screen-loading" class="screen">
+  <div class="ld-bar-track"><div class="ld-bar" id="ld-bar"></div></div>
+  <div class="ld-center">
+    <div class="ld-year">Made with love · 2024</div>
+    <h1 class="ld-name" id="ld-name">Jahnavi</h1>
+    <p class="ld-tagline">A film for someone who means everything.</p>
   </div>
+  <p class="ld-label" id="ld-label">Preparing something special…</p>
+</div>
 
-  <!-- ══════════════════════════════════════════
-       MAIN STORY WRAPPER
-  ══════════════════════════════════════════ -->
-  <div id="screen-story" class="screen screen-story">
+<!-- ═══════════════════════════
+     SCREEN: STORY
+═══════════════════════════ -->
+<div id="screen-story" class="screen">
 
-    <!-- Progress bar -->
-    <div class="progress-track">
-      <div class="progress-fill" id="progress-fill"></div>
+  <!-- top chrome -->
+  <div class="story-progress"><div class="story-progress-fill" id="prog-fill"></div></div>
+  <div class="story-counter" id="story-counter">1 / 8</div>
+
+  <!-- slides -->
+  <div class="slides-wrap" id="slides-wrap">
+
+    <!-- SLIDE 1: HERO -->
+    <div class="slide active" data-i="0">
+      <div class="sl-bg">
+        <img src="images/hero_fairy_lights.jpg" class="sl-img kb-right"
+             onerror="this.onerror=null;this.src='images/hero_fairy_light.jpg'"/>
+        <div class="sl-dim dim-full"></div>
+      </div>
+      <div class="sl-body center">
+        <span class="sl-tag s1">Just for you</span>
+        <h2 class="sl-h s2">You are<br/><em>someone special.</em></h2>
+        <p class="sl-p s3">Not everyone gets a film made for them.<br/>
+        But you — you earned this one.<br/>
+        Just by being exactly who you are.</p>
+        <div class="sl-line s4"></div>
+      </div>
+      <div class="sl-hint s5">swipe or tap →</div>
     </div>
 
-    <!-- Slide counter -->
-    <div class="slide-counter" id="slide-counter">1 / 8</div>
-
-    <!-- ── SLIDES ── -->
-    <div class="slides-container" id="slides-container">
-
-      <!-- SLIDE 1 — HERO -->
-      <div class="slide slide-hero" data-index="0">
-        <div class="slide-bg">
-          <img src="images/hero_fairy_lights.jpg" alt="" class="slide-bg-img kenburns"
-               onerror="this.onerror=null;this.src='images/hero_fairy_light.jpg'" />
-          <div class="slide-bg-overlay overlay-deep"></div>
-          <div class="slide-vignette"></div>
-        </div>
-        <div class="slide-content slide-content--center">
-          <div class="anim-wrap">
-            <div class="slide-eyebrow mono reveal-up">Just for you</div>
-            <h2 class="slide-title display-xl reveal-up delay-1">You are<br/><em>someone special.</em></h2>
-            <p class="slide-caption reveal-up delay-2">
-              Not everyone gets a film made for them.<br/>
-              But you — you earned this one.<br/>
-              Just by being you.
-            </p>
-            <div class="hero-line reveal-up delay-3"></div>
-          </div>
-        </div>
-        <div class="slide-scroll-hint reveal-up delay-4">scroll or tap →</div>
+    <!-- SLIDE 2: WHITE DRESS -->
+    <div class="slide" data-i="1">
+      <div class="sl-bg">
+        <img src="images/white_dress.jpg" class="sl-img kb-up" onerror="this.style.opacity='0'"/>
+        <div class="sl-dim dim-left"></div>
       </div>
-
-      <!-- SLIDE 2 — WHITE DRESS / EXHIBIT A -->
-      <div class="slide slide-portrait" data-index="1">
-        <div class="slide-bg">
-          <img src="images/white_dress.jpg" alt="" class="slide-bg-img kenburns-slow" onerror="this.style.opacity='0'" />
-          <div class="slide-bg-overlay overlay-left"></div>
-        </div>
-        <div class="slide-content slide-content--left">
-          <div class="anim-wrap">
-            <div class="slide-eyebrow mono reveal-up">You in this</div>
-            <h2 class="slide-title display-lg reveal-up delay-1">The way<br/>you look.</h2>
-            <p class="slide-caption reveal-up delay-2">
-              There are moments when you walk in somewhere<br/>
-              and I think — she has no idea, does she?<br/>
-              No idea how beautiful she actually is.<br/>
-              This photo is proof.
-            </p>
-            <div class="slide-quote-card reveal-up delay-3">
-              <span class="quote-text">"She doesn't even try, and she still looks like that."</span>
-            </div>
-          </div>
+      <div class="sl-body left">
+        <span class="sl-tag s1">You in this</span>
+        <h2 class="sl-h s2">The way<br/>you look.</h2>
+        <p class="sl-p s3">There are moments when you walk in somewhere
+        and I genuinely think — she has no idea, does she?
+        No idea how beautiful she actually is.
+        This photo is proof.</p>
+        <div class="sl-quote s4">
+          <span>"She doesn't even try, and she still looks like that."</span>
         </div>
       </div>
+    </div>
 
-      <!-- SLIDE 3 — SAREE SMILE -->
-      <div class="slide slide-portrait" data-index="2">
-        <div class="slide-bg">
-          <img src="images/saree_smile.jpg" alt="" class="slide-bg-img kenburns-slow" onerror="this.style.opacity='0'" />
-          <div class="slide-bg-overlay overlay-right"></div>
-        </div>
-        <div class="slide-content slide-content--right">
-          <div class="anim-wrap">
-            <div class="slide-eyebrow mono reveal-up">Your smile</div>
-            <h2 class="slide-title display-lg reveal-up delay-1">This smile<br/>is everything.</h2>
-            <p class="slide-caption reveal-up delay-2">
-              Whenever you smile like this —<br/>
-              genuinely, fully, without thinking about it —<br/>
-              the whole room feels different.<br/>
-              I hope you know that.
-            </p>
-          </div>
+    <!-- SLIDE 3: SAREE SMILE -->
+    <div class="slide" data-i="2">
+      <div class="sl-bg">
+        <img src="images/saree_smile.jpg" class="sl-img kb-left" onerror="this.style.opacity='0'"/>
+        <div class="sl-dim dim-right"></div>
+      </div>
+      <div class="sl-body right">
+        <span class="sl-tag s1">Your smile</span>
+        <h2 class="sl-h s2">This smile<br/>is everything.</h2>
+        <p class="sl-p s3">Whenever you smile like this —
+        genuinely, fully, without thinking about it —
+        the whole room feels different.
+        I hope you know that.</p>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: THINGS ABOUT YOU -->
+    <div class="slide" data-i="3">
+      <div class="sl-bg dark-warm">
+        <div class="orb o1"></div>
+        <div class="orb o2"></div>
+      </div>
+      <div class="sl-body center">
+        <span class="sl-tag s1">Things I know for sure</span>
+        <h2 class="sl-h s2">What makes<br/><em>you, you.</em></h2>
+        <ul class="mem-list">
+          <li class="mem-item s3"><span class="mem-ico">🌸</span><span>You make everyone feel comfortable without even trying.</span></li>
+          <li class="mem-item s4"><span class="mem-ico">✨</span><span>Your laugh is contagious. Once you start — everyone starts.</span></li>
+          <li class="mem-item s5"><span class="mem-ico">🤍</span><span>You care so deeply about people. Even when you pretend you don't.</span></li>
+          <li class="mem-item s6"><span class="mem-ico">🌙</span><span>You are the kind of person that is impossible to forget.</span></li>
+          <li class="mem-item s7"><span class="mem-ico">💫</span><span>You have no idea how much you mean to people. That part still gets me.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: NAVRATRI -->
+    <div class="slide" data-i="4">
+      <div class="sl-bg">
+        <img src="images/navratri_mirror.jpg" class="sl-img kb-right" onerror="this.style.opacity='0'"/>
+        <div class="sl-dim dim-full"></div>
+      </div>
+      <div class="sl-body center">
+        <span class="sl-tag s1">Navratri ✨</span>
+        <h2 class="sl-h s2">You looked<br/>so happy<br/>that day.</h2>
+        <p class="sl-p s3">I love this photo because of your eyes.
+        There's this pure joy in them.
+        That's the version of you I always want to remember.</p>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: BESTFRIEND HUG — rewritten about HER, not "us" -->
+    <div class="slide" data-i="5">
+      <div class="sl-bg">
+        <img src="images/bestfriend_hug.jpg" class="sl-img kb-up" onerror="this.style.opacity='0'"/>
+        <div class="sl-dim dim-full"></div>
+      </div>
+      <div class="sl-body center">
+        <span class="sl-tag s1">The way you love</span>
+        <h2 class="sl-h s2">She loves<br/><em>fully.</em></h2>
+        <p class="sl-p s3">This photo says it all.
+        When she loves someone, she loves them completely.
+        No half-measures, no holding back.
+        That is one of the most beautiful things about her.</p>
+        <div class="sl-heart s4">🤍</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: HER CUTENESS -->
+    <div class="slide" data-i="6">
+      <div class="sl-bg">
+        <img src="images/idiot_dosa_story.jpg" class="sl-img kb-left" onerror="this.style.opacity='0'"/>
+        <div class="sl-dim dim-left"></div>
+      </div>
+      <div class="sl-body left">
+        <span class="sl-tag s1">Can we talk about</span>
+        <h2 class="sl-h s2">How are you<br/>this cute?</h2>
+        <p class="sl-p s3">Genuinely — I don't understand it.
+        You make the most normal expressions
+        and somehow they are adorable every single time.
+        It is a little unfair, honestly.</p>
+        <div class="sl-quote s4">
+          <span>"Stop being this cute. It's too much."</span>
         </div>
       </div>
+    </div>
 
-      <!-- SLIDE 4 — EMOTIONAL APPRECIATION (replaced roast list) -->
-      <div class="slide slide-centered" data-index="3">
-        <div class="slide-bg slide-bg--color bg-dark-warm">
-          <div class="floating-orb orb-1"></div>
-          <div class="floating-orb orb-2"></div>
-          <div class="floating-orb orb-3"></div>
+    <!-- SLIDE 8: FINAL LETTER -->
+    <div class="slide slide-letter" data-i="7">
+      <div class="sl-bg dark-letter">
+        <div class="orb o3"></div>
+      </div>
+      <div class="sl-body letter-body">
+        <span class="sl-tag s1">And finally —</span>
+        <h2 class="letter-h s2">The part I<br/>really mean.</h2>
+        <div class="letter-text s3">
+          <p>I made this because I wanted you to feel something real today.</p>
+          <p>I don't say things like this out loud very often. But I figured — at least once — you deserve to read all of it in one place.</p>
+          <p>You are one of those rare people who just makes life better. Not because you're perfect or because everything is always okay — but because you're genuinely, completely yourself. And that version of you is someone I feel lucky to know.</p>
+          <p>You've been there in ways that mattered. Quietly, without making it a big thing. That's the part that gets me the most — you don't even realise how much you mean to the people around you.</p>
+          <p>I've watched you go through things that weren't easy, and I've watched you come out of them still smiling, still warm, still you. That is not small. That is actually everything.</p>
+          <p class="letter-em">You are loved. More than you know. More than you let yourself believe.</p>
+          <p>Thank you for being in my life. Genuinely — thank you.</p>
+          <p class="letter-sign">— With so much love,<br/>Your person 🤍</p>
         </div>
-        <div class="slide-content slide-content--center">
-          <div class="anim-wrap">
-            <div class="slide-eyebrow mono reveal-up">Things I know for sure</div>
-            <h2 class="slide-title display-lg reveal-up delay-1">What makes<br/><em>you, you.</em></h2>
-            <div class="memory-list">
-              <div class="memory-item reveal-left delay-1">
-                <span class="memory-icon">🌸</span>
-                <span>You make everyone around you feel comfortable without even trying.</span>
-              </div>
-              <div class="memory-item reveal-left delay-2">
-                <span class="memory-icon">✨</span>
-                <span>Your laugh is contagious. Like genuinely, once you start — everyone starts.</span>
-              </div>
-              <div class="memory-item reveal-left delay-3">
-                <span class="memory-icon">🤍</span>
-                <span>You care so deeply about people. Even when you pretend you don't.</span>
-              </div>
-              <div class="memory-item reveal-left delay-4">
-                <span class="memory-icon">🌙</span>
-                <span>You are the kind of person that is impossible to forget.</span>
-              </div>
-              <div class="memory-item reveal-left delay-5">
-                <span class="memory-icon">💫</span>
-                <span>And honestly? You have no idea how much you mean to people. That part still gets me.</span>
-              </div>
-            </div>
-          </div>
+        <div class="letter-foot s4">
+          <button class="replay-btn" onclick="restartExperience()">↺ &nbsp;Watch again</button>
         </div>
       </div>
+    </div>
 
-      <!-- SLIDE 5 — NAVRATRI MIRROR -->
-      <div class="slide slide-diptych" data-index="4">
-        <div class="slide-bg">
-          <img src="images/navratri_mirror.jpg" alt="" class="slide-bg-img kenburns" onerror="this.style.opacity='0'" />
-          <div class="slide-bg-overlay overlay-deep"></div>
-        </div>
-        <div class="slide-content slide-content--center">
-          <div class="anim-wrap">
-            <div class="slide-eyebrow mono reveal-up">Navratri ✨</div>
-            <h2 class="slide-title display-lg reveal-up delay-1">You looked<br/>so happy<br/>that day.</h2>
-            <p class="slide-caption reveal-up delay-2">
-              I love this photo because of your eyes.<br/>
-              There's this pure joy in them.<br/>
-              That's the version of you I always want to remember.
-            </p>
-          </div>
-        </div>
-      </div>
+  </div><!-- /slides-wrap -->
 
-      <!-- SLIDE 6 — BESTFRIEND HUG -->
-      <div class="slide slide-hero" data-index="5">
-        <div class="slide-bg">
-          <img src="images/bestfriend_hug.jpg" alt="" class="slide-bg-img kenburns-slow" onerror="this.style.opacity='0'" />
-          <div class="slide-bg-overlay overlay-deep"></div>
-        </div>
-        <div class="slide-content slide-content--center">
-          <div class="anim-wrap">
-            <div class="slide-eyebrow mono reveal-up">Us</div>
-            <h2 class="slide-title display-xl reveal-up delay-1">This hug.<br/><em>This moment.</em></h2>
-            <p class="slide-caption reveal-up delay-2">
-              This is what I'll always hold onto.<br/>
-              Not the photos, not the places —<br/>
-              just this. Us. Together.
-            </p>
-            <div class="heart-pulse reveal-up delay-3">🤍</div>
-          </div>
-        </div>
-      </div>
+  <!-- nav arrows -->
+  <button class="nav-arr prev" id="nav-prev" onclick="prevSlide()">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <button class="nav-arr next" id="nav-next" onclick="nextSlide()">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
 
-      <!-- SLIDE 7 — HER CUTENESS (replaced dosa) -->
-      <div class="slide slide-portrait" data-index="6">
-        <div class="slide-bg">
-          <img src="images/idiot_dosa_story.jpg" alt="" class="slide-bg-img kenburns-slow" onerror="this.style.opacity='0'" />
-          <div class="slide-bg-overlay overlay-left"></div>
-        </div>
-        <div class="slide-content slide-content--left">
-          <div class="anim-wrap">
-            <div class="slide-eyebrow mono reveal-up">Can we talk about</div>
-            <h2 class="slide-title display-lg reveal-up delay-1">How are<br/>you this<br/>cute?</h2>
-            <p class="slide-caption reveal-up delay-2">
-              Like genuinely — I don't understand it.<br/>
-              You make the most normal expressions<br/>
-              and somehow they're adorable every single time.<br/>
-              It's a little unfair, honestly.
-            </p>
-            <div class="slide-quote-card reveal-up delay-3">
-              <span class="quote-text">"Stop being this cute. It's too much."</span>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- dot nav -->
+  <div class="dot-row" id="dot-row"></div>
 
-      <!-- SLIDE 8 — FINAL LETTER -->
-      <div class="slide slide-letter" data-index="7">
-        <div class="slide-bg slide-bg--color bg-dark-letter">
-          <div class="floating-orb orb-letter-1"></div>
-          <div class="floating-orb orb-letter-2"></div>
-        </div>
-        <div class="slide-content slide-content--letter">
-          <div class="slide-eyebrow mono reveal-up">And finally —</div>
-          <h2 class="letter-heading reveal-up delay-1">The part I<br/>really mean.</h2>
+</div><!-- /screen-story -->
 
-          <div class="letter-body reveal-up delay-2">
-            <p>I made this because I wanted you to feel something real today.</p>
+<!-- MUSIC -->
+<div class="music-wrap" id="music-wrap">
+  <audio id="audio" loop><source src="audio/song.mp3" type="audio/mpeg"/></audio>
+  <button class="music-btn" id="music-btn" onclick="toggleMusic()" aria-label="Toggle music">
+    <div class="mv" id="mv"><div class="mv-ring"></div><div class="mv-dot"></div></div>
+    <div class="mw" id="mw"><span></span><span></span><span></span><span></span><span></span></div>
+  </button>
+</div>
 
-            <p>I don't say things like this out loud very often. Maybe because words feel too small sometimes. But I figured — at least once — you deserve to read all of it in one place.</p>
+<!-- fade overlay -->
+<div class="fade-overlay" id="fade-overlay"></div>
 
-            <p>You are one of those rare people who just makes life better. Not because you're perfect or because everything is always okay — but because you're genuinely, completely yourself. And that version of you is someone I feel lucky to know.</p>
-
-            <p>You've been there in ways that mattered. Quietly, without making it a big thing. That's the part that gets me the most — you don't even realise how much you do for the people around you.</p>
-
-            <p>I've watched you go through things that weren't easy, and I've watched you come out of them still smiling, still warm, still you. That's not small. That's actually everything.</p>
-
-            <p class="letter-emphasis">You are loved. More than you know. More than you let yourself believe.</p>
-
-            <p>Thank you for being in my life. Genuinely, from the bottom of my heart — thank you.</p>
-
-            <p class="letter-sign">— With so much love,<br/>Your person 🤍</p>
-          </div>
-
-          <div class="letter-footer reveal-up delay-3">
-            <button class="replay-btn" onclick="restartExperience()">
-              <span>↺</span> Watch again
-            </button>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /slides-container -->
-
-    <!-- Navigation -->
-    <button class="nav-btn nav-prev" id="nav-prev" onclick="prevSlide()" aria-label="Previous">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-    <button class="nav-btn nav-next" id="nav-next" onclick="nextSlide()" aria-label="Next">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path d="M8 4L14 10L8 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-
-    <!-- Dot navigation -->
-    <div class="dot-nav" id="dot-nav"></div>
-
-  </div><!-- /screen-story -->
-
-  <!-- MUSIC PLAYER -->
-  <div class="music-player" id="music-player">
-    <audio id="audio" loop>
-      <source src="audio/song.mp3" type="audio/mpeg" />
-    </audio>
-    <button class="music-btn" id="music-btn" onclick="toggleMusic()" aria-label="Play/Pause music">
-      <div class="music-vinyl" id="music-vinyl">
-        <div class="vinyl-ring"></div>
-        <div class="vinyl-center"></div>
-      </div>
-      <div class="music-wave" id="music-wave">
-        <span></span><span></span><span></span><span></span><span></span>
-      </div>
-    </button>
-    <div class="music-tooltip" id="music-tooltip">Play music</div>
-  </div>
-
-  <!-- Transition overlay -->
-  <div class="transition-overlay" id="transition-overlay"></div>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
