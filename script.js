@@ -1,11 +1,6 @@
-/* ════════════════════════════════════════════
-   JAHNAVI SPECIAL — script.js
-   Cinematic story navigation + music player
-════════════════════════════════════════════ */
-
 'use strict';
 
-// ── STATE ──────────────────────────────────
+// ── STATE ─────────────────────────────────
 const state = {
   currentSlide: 0,
   totalSlides: 8,
@@ -18,32 +13,133 @@ const state = {
   touchEndY: 0,
 };
 
-// ── DOM REFS ───────────────────────────────
+// ── DOM ───────────────────────────────────
 const $ = id => document.getElementById(id);
-const screenIntro    = $('screen-intro');
-const screenLoading  = $('screen-loading');
-const screenStory    = $('screen-story');
-const slidesEl       = $('slides-container');
-const progressFill   = $('progress-fill');
-const slideCounter   = $('slide-counter');
-const dotNav         = $('dot-nav');
-const navPrev        = $('nav-prev');
-const navNext        = $('nav-next');
-const audio          = $('audio');
-const musicBtn       = $('music-btn');
-const musicPlayer    = $('music-player');
-const musicTooltip   = $('music-tooltip');
-const loadingBar     = document.querySelector('.loading-bar');
+const screenIntro     = $('screen-intro');
+const screenLoading   = $('screen-loading');
+const screenStory     = $('screen-story');
+const progressFill    = $('progress-fill');
+const slideCounter    = $('slide-counter');
+const dotNav          = $('dot-nav');
+const navPrev         = $('nav-prev');
+const navNext         = $('nav-next');
+const audio           = $('audio');
+const musicBtn        = $('music-btn');
+const musicPlayer     = $('music-player');
+const musicTooltip    = $('music-tooltip');
+const loadingBar      = document.querySelector('.loading-bar');
 const titleCardReveal = document.querySelector('.title-card-reveal');
-const titleCardName  = $('title-card-name');
-const loadingLabel   = $('loading-label');
-const overlay        = $('transition-overlay');
+const titleCardName   = $('title-card-name');
+const loadingLabel    = $('loading-label');
+const overlay         = $('transition-overlay');
+const canvas          = $('particles-canvas');
 
-// ── INIT ───────────────────────────────────
+// ── PARTICLES ─────────────────────────────
+const ctx = canvas ? canvas.getContext('2d') : null;
+let particles = [];
+let particleRAF = null;
+let particlesActive = false;
+
+function initParticles() {
+  if (!canvas || !ctx) return;
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+}
+
+function resizeCanvas() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function spawnParticle() {
+  return {
+    x: Math.random() * canvas.width,
+    y: canvas.height + 10,
+    size: Math.random() * 1.8 + 0.4,
+    speedY: Math.random() * 0.6 + 0.3,
+    speedX: (Math.random() - 0.5) * 0.3,
+    opacity: 0,
+    maxOpacity: Math.random() * 0.45 + 0.1,
+    life: 0,
+    maxLife: Math.random() * 200 + 150,
+  };
+}
+
+function animateParticles() {
+  if (!ctx || !particlesActive) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Add new particles
+  if (particles.length < 40 && Math.random() < 0.3) {
+    particles.push(spawnParticle());
+  }
+
+  particles = particles.filter(p => p.life < p.maxLife);
+
+  particles.forEach(p => {
+    p.life++;
+    p.y -= p.speedY;
+    p.x += p.speedX;
+
+    const progress = p.life / p.maxLife;
+    if (progress < 0.15) {
+      p.opacity = (progress / 0.15) * p.maxOpacity;
+    } else if (progress > 0.75) {
+      p.opacity = ((1 - progress) / 0.25) * p.maxOpacity;
+    } else {
+      p.opacity = p.maxOpacity;
+    }
+
+    ctx.save();
+    ctx.globalAlpha = p.opacity;
+    ctx.fillStyle = '#c9a96e';
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+
+  particleRAF = requestAnimationFrame(animateParticles);
+}
+
+function startParticles() {
+  if (particlesActive) return;
+  particlesActive = true;
+  canvas.classList.add('visible');
+  animateParticles();
+}
+
+function stopParticles() {
+  particlesActive = false;
+  canvas.classList.remove('visible');
+  if (particleRAF) cancelAnimationFrame(particleRAF);
+  if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = [];
+}
+
+// ── INTRO STARS ───────────────────────────
+function buildStars() {
+  const container = $('intro-stars');
+  if (!container) return;
+  for (let i = 0; i < 35; i++) {
+    const star = document.createElement('div');
+    star.className = 'star-dot';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top  = Math.random() * 100 + '%';
+    const dur = (Math.random() * 8 + 5).toFixed(1) + 's';
+    const delay = (Math.random() * 6).toFixed(1) + 's';
+    star.style.animation = `starFloat ${dur} ${delay} linear infinite`;
+    container.appendChild(star);
+  }
+}
+
+// ── INIT ──────────────────────────────────
 function init() {
+  buildStars();
   buildDotNav();
   bindKeyboard();
   bindTouch();
+  initParticles();
   updateNav();
 }
 
@@ -51,56 +147,46 @@ function init() {
 function selectProfile(card) {
   if (state.profileSelected) return;
   state.profileSelected = card.dataset.name;
-
-  // Mark selected
   card.classList.add('selected');
 
-  // Update title card name
-  const names = {
-    Dosa: 'Dosa',
-    Dumbo: 'Dumbo',
-    Sleepyhead: 'Sleepyhead',
-    Idiot: 'Idiot',
-  };
+  const names = { Dosa: 'Dosa', Dumbo: 'Dumbo', Sleepyhead: 'Sleepyhead', Jahnavi: 'Jahnavi' };
   titleCardName.textContent = names[state.profileSelected] || 'Jahnavi';
 
-  // Fade out other cards
+  // Fade out others
   document.querySelectorAll('.profile-card').forEach(c => {
     if (c !== card) {
       c.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
       c.style.opacity = '0';
-      c.style.transform = 'scale(0.92)';
+      c.style.transform = 'translateY(10px) scale(0.94)';
     }
   });
 
-  // Short delay then transition
-  setTimeout(() => transitionToLoading(), 700);
+  setTimeout(transitionToLoading, 750);
 }
 
-// ── LOADING SEQUENCE ──────────────────────
+// ── LOADING ───────────────────────────────
 function transitionToLoading() {
-  // Flash overlay
   overlay.classList.add('active');
 
   setTimeout(() => {
-    // Hide intro, show loading
     screenIntro.classList.remove('active');
     screenIntro.classList.add('exit');
     screenLoading.classList.add('active');
     overlay.classList.remove('active');
 
-    // Trigger loading bar
     requestAnimationFrame(() => {
       setTimeout(() => {
         loadingBar.style.width = '100%';
 
-        // Show title card mid-load
         setTimeout(() => {
           titleCardReveal.classList.add('visible');
-          loadingLabel.textContent = 'Curating your chaos…';
-        }, 600);
+          loadingLabel.style.opacity = '0';
+          setTimeout(() => {
+            loadingLabel.textContent = 'Gathering your memories…';
+            loadingLabel.style.opacity = '1';
+          }, 300);
+        }, 700);
 
-        // Then transition to story
         setTimeout(() => {
           overlay.classList.add('active');
           setTimeout(() => {
@@ -109,27 +195,34 @@ function transitionToLoading() {
             screenStory.classList.add('active');
             activateSlide(0);
             overlay.classList.remove('active');
+            startParticles();
 
-            // Show music player
             setTimeout(() => {
               musicPlayer.classList.add('visible');
-            }, 800);
-
+            }, 1000);
           }, 400);
-        }, 2800);
-      }, 100);
+        }, 3000);
+      }, 80);
     });
   }, 300);
 }
 
-// ── SLIDE NAVIGATION ──────────────────────
-function activateSlide(index, direction = 'forward') {
+// ── SLIDE NAVIGATION ─────────────────────
+function activateSlide(index) {
   const slides = document.querySelectorAll('.slide');
 
-  // Deactivate all
-  slides.forEach(s => s.classList.remove('active'));
+  // Remove active/leaving from all
+  slides.forEach(s => {
+    s.classList.remove('active');
+    s.classList.remove('leaving');
+    // Reset all reveal-up/left so they re-animate
+    s.querySelectorAll('.reveal-up, .reveal-left').forEach(el => {
+      el.style.animation = 'none';
+      el.offsetHeight; // reflow
+      el.style.animation = '';
+    });
+  });
 
-  // Activate target
   const target = slides[index];
   if (!target) return;
   target.classList.add('active');
@@ -148,13 +241,12 @@ function nextSlide() {
   state.isTransitioning = true;
   const next = state.currentSlide + 1;
 
-  // Brief flash between slides
   overlay.classList.add('active');
   setTimeout(() => {
-    activateSlide(next, 'forward');
+    activateSlide(next);
     overlay.classList.remove('active');
-    setTimeout(() => { state.isTransitioning = false; }, 300);
-  }, 200);
+    setTimeout(() => { state.isTransitioning = false; }, 350);
+  }, 220);
 }
 
 function prevSlide() {
@@ -166,28 +258,26 @@ function prevSlide() {
 
   overlay.classList.add('active');
   setTimeout(() => {
-    activateSlide(prev, 'back');
+    activateSlide(prev);
     overlay.classList.remove('active');
-    setTimeout(() => { state.isTransitioning = false; }, 300);
-  }, 200);
+    setTimeout(() => { state.isTransitioning = false; }, 350);
+  }, 220);
 }
 
 function goToSlide(index) {
-  if (state.isTransitioning) return;
-  if (index === state.currentSlide) return;
-
+  if (state.isTransitioning || index === state.currentSlide) return;
   state.isTransitioning = true;
   overlay.classList.add('active');
   setTimeout(() => {
     activateSlide(index);
     overlay.classList.remove('active');
-    setTimeout(() => { state.isTransitioning = false; }, 300);
-  }, 200);
+    setTimeout(() => { state.isTransitioning = false; }, 350);
+  }, 220);
 }
 
-// ── PROGRESS / UI UPDATES ─────────────────
+// ── PROGRESS / UI ─────────────────────────
 function updateProgress() {
-  const pct = ((state.currentSlide) / (state.totalSlides - 1)) * 100;
+  const pct = (state.currentSlide / (state.totalSlides - 1)) * 100;
   progressFill.style.width = `${pct}%`;
 }
 
@@ -200,21 +290,21 @@ function updateNav() {
   navNext.classList.toggle('hidden', state.currentSlide === state.totalSlides - 1);
 }
 
-// ── DOT NAV ───────────────────────────────
+// ── DOTS ──────────────────────────────────
 function buildDotNav() {
   dotNav.innerHTML = '';
   for (let i = 0; i < state.totalSlides; i++) {
     const dot = document.createElement('button');
     dot.className = 'dot' + (i === 0 ? ' active' : '');
-    dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+    dot.setAttribute('aria-label', `Slide ${i + 1}`);
     dot.addEventListener('click', () => goToSlide(i));
     dotNav.appendChild(dot);
   }
 }
 
 function updateDots() {
-  document.querySelectorAll('.dot').forEach((dot, i) => {
-    dot.classList.toggle('active', i === state.currentSlide);
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === state.currentSlide);
   });
 }
 
@@ -222,59 +312,35 @@ function updateDots() {
 function bindKeyboard() {
   document.addEventListener('keydown', e => {
     if (!screenStory.classList.contains('active')) return;
-    switch (e.key) {
-      case 'ArrowRight':
-      case 'ArrowDown':
-      case ' ':
-        e.preventDefault();
-        nextSlide();
-        break;
-      case 'ArrowLeft':
-      case 'ArrowUp':
-        e.preventDefault();
-        prevSlide();
-        break;
-      case 'm':
-      case 'M':
-        toggleMusic();
-        break;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault(); nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault(); prevSlide();
+    } else if (e.key === 'm' || e.key === 'M') {
+      toggleMusic();
     }
   });
 }
 
 // ── TOUCH / SWIPE ─────────────────────────
 function bindTouch() {
-  const container = document.body;
-
-  container.addEventListener('touchstart', e => {
+  document.body.addEventListener('touchstart', e => {
     state.touchStartX = e.changedTouches[0].screenX;
     state.touchStartY = e.changedTouches[0].screenY;
   }, { passive: true });
 
-  container.addEventListener('touchend', e => {
+  document.body.addEventListener('touchend', e => {
     state.touchEndX = e.changedTouches[0].screenX;
     state.touchEndY = e.changedTouches[0].screenY;
-    handleSwipe();
+    const dx = state.touchEndX - state.touchStartX;
+    const dy = state.touchEndY - state.touchStartY;
+    if (!screenStory.classList.contains('active')) return;
+    if (Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx) * 1.5) return;
+    if (dx < 0) nextSlide(); else prevSlide();
   }, { passive: true });
 }
 
-function handleSwipe() {
-  if (!screenStory.classList.contains('active')) return;
-
-  const dx = state.touchEndX - state.touchStartX;
-  const dy = state.touchEndY - state.touchStartY;
-  const absDx = Math.abs(dx);
-  const absDy = Math.abs(dy);
-
-  // Only horizontal swipes (ignore vertical scrolls, e.g. in letter)
-  if (absDx < 40) return;
-  if (absDy > absDx * 1.5) return;
-
-  if (dx < 0) nextSlide();
-  else prevSlide();
-}
-
-// ── MUSIC PLAYER ──────────────────────────
+// ── MUSIC ─────────────────────────────────
 function toggleMusic() {
   if (state.musicPlaying) {
     audio.pause();
@@ -282,93 +348,43 @@ function toggleMusic() {
     musicTooltip.textContent = 'Play music';
     state.musicPlaying = false;
   } else {
+    audio.volume = 0;
     audio.play().then(() => {
       musicBtn.classList.add('playing');
       musicTooltip.textContent = 'Pause music';
       state.musicPlaying = true;
-    }).catch(err => {
-      console.warn('Audio play failed:', err);
-    });
+      fadeIn(audio, 0.7, 1200);
+    }).catch(() => {});
   }
 }
 
-// Smooth fade on audio
+function fadeIn(audioEl, targetVol, duration) {
+  const steps = 30;
+  const step = targetVol / steps;
+  let current = 0;
+  const interval = setInterval(() => {
+    current += step;
+    audioEl.volume = Math.min(current, targetVol);
+    if (current >= targetVol) clearInterval(interval);
+  }, duration / steps);
+}
+
 audio.addEventListener('pause', () => {
   musicBtn.classList.remove('playing');
   musicTooltip.textContent = 'Play music';
+  state.musicPlaying = false;
 });
 audio.addEventListener('play', () => {
   musicBtn.classList.add('playing');
   musicTooltip.textContent = 'Pause music';
+  state.musicPlaying = true;
 });
 
-// ── RESTART ───────────────────────────────
-function restartExperience() {
-  overlay.classList.add('active');
-
-  setTimeout(() => {
-    // Reset state
-    state.currentSlide = 0;
-    state.profileSelected = null;
-    state.isTransitioning = false;
-
-    // Pause music
-    if (state.musicPlaying) {
-      audio.pause();
-      audio.currentTime = 0;
-      musicBtn.classList.remove('playing');
-      state.musicPlaying = false;
-    }
-
-    // Reset loading bar
-    loadingBar.style.transition = 'none';
-    loadingBar.style.width = '0';
-    titleCardReveal.classList.remove('visible');
-    loadingLabel.textContent = 'Loading your memories…';
-
-    // Reset profile cards
-    document.querySelectorAll('.profile-card').forEach(c => {
-      c.classList.remove('selected');
-      c.style.opacity = '';
-      c.style.transform = '';
-      c.style.transition = '';
-    });
-
-    // Reset screens
-    screenStory.classList.remove('active');
-    screenStory.classList.add('exit');
-    screenLoading.classList.remove('active');
-    screenLoading.classList.add('exit');
-    musicPlayer.classList.remove('visible');
-
-    // Deactivate all slides
-    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
-
-    // Show intro
-    setTimeout(() => {
-      screenStory.classList.remove('exit');
-      screenLoading.classList.remove('exit');
-      screenIntro.classList.remove('exit');
-      screenIntro.classList.add('active');
-      overlay.classList.remove('active');
-
-      // Re-enable loading bar transition after reset
-      setTimeout(() => {
-        loadingBar.style.transition = 'width 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-      }, 100);
-    }, 300);
-
-  }, 400);
-}
-
-// ── SCROLL WHEEL NAV ──────────────────────
+// ── SCROLL WHEEL ──────────────────────────
 let wheelTimeout = null;
 document.addEventListener('wheel', e => {
   if (!screenStory.classList.contains('active')) return;
-
-  // Skip scroll nav on letter slide (allow actual scrolling)
   if (state.currentSlide === state.totalSlides - 1) return;
-
   clearTimeout(wheelTimeout);
   wheelTimeout = setTimeout(() => {
     if (e.deltaY > 40) nextSlide();
@@ -376,5 +392,53 @@ document.addEventListener('wheel', e => {
   }, 50);
 }, { passive: true });
 
-// ── START ─────────────────────────────────
+// ── RESTART ───────────────────────────────
+function restartExperience() {
+  overlay.classList.add('active');
+
+  setTimeout(() => {
+    state.currentSlide = 0;
+    state.profileSelected = null;
+    state.isTransitioning = false;
+
+    if (state.musicPlaying) {
+      audio.pause(); audio.currentTime = 0;
+      musicBtn.classList.remove('playing');
+      state.musicPlaying = false;
+    }
+
+    stopParticles();
+
+    loadingBar.style.transition = 'none';
+    loadingBar.style.width = '0';
+    titleCardReveal.classList.remove('visible');
+    loadingLabel.textContent = 'Preparing something special…';
+    loadingLabel.style.opacity = '1';
+
+    document.querySelectorAll('.profile-card').forEach(c => {
+      c.classList.remove('selected');
+      c.style.opacity = ''; c.style.transform = ''; c.style.transition = '';
+    });
+
+    screenStory.classList.remove('active'); screenStory.classList.add('exit');
+    screenLoading.classList.remove('active'); screenLoading.classList.add('exit');
+    musicPlayer.classList.remove('visible');
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+
+    setTimeout(() => {
+      screenStory.classList.remove('exit');
+      screenLoading.classList.remove('exit');
+      screenIntro.classList.remove('exit');
+      screenIntro.classList.add('active');
+      overlay.classList.remove('active');
+
+      setTimeout(() => {
+        loadingBar.style.transition = 'width 2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      }, 100);
+    }, 300);
+  }, 400);
+}
+
+// ── BOOT ──────────────────────────────────
 document.addEventListener('DOMContentLoaded', init);
+
