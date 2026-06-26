@@ -1,218 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Private Memory Film — For Jahnavi</title>
-<meta name="description" content="A private memory film. Just for you.">
-<meta property="og:title" content="Something I made for you 🎬">
-<meta property="og:description" content="A private memory film. Just for you.">
-<meta property="og:image" content="images/idiot_dosa_story.jpg">
-<meta property="og:type" content="website">
-<meta name="theme-color" content="#0a0a0a">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>🎬</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>For Jahnavi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Inter:wght@300;400;500;600&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- Film grain overlay -->
-<div class="grain" aria-hidden="true"></div>
+  <!-- ══════════════════════════════════════════
+       SCREEN 0 — NETFLIX PROFILE SELECTOR
+  ══════════════════════════════════════════ -->
+  <div id="screen-intro" class="screen screen-intro active">
+    <div class="intro-bg-grain"></div>
+    <div class="intro-content">
+      <div class="intro-eyebrow">A private screening for one</div>
+      <h1 class="intro-heading">Who's watching?</h1>
+      <div class="profile-grid">
 
-<!-- Safe-area letterbox -->
-<div class="letterbox-top" aria-hidden="true"></div>
-<div class="letterbox-bottom" aria-hidden="true"></div>
+        <div class="profile-card" data-name="Dosa" onclick="selectProfile(this)">
+          <div class="profile-img-wrap">
+            <img src="idiot_dosa_story.jpg" alt="Dosa" />
+            <div class="profile-glow"></div>
+          </div>
+          <span class="profile-label">Dosa</span>
+          <span class="profile-sub">The one who eats and runs</span>
+        </div>
 
-<!-- Transition overlay -->
-<div id="transition-overlay" aria-hidden="true"></div>
+        <div class="profile-card" data-name="Dumbo" onclick="selectProfile(this)">
+          <div class="profile-img-wrap">
+            <img src="funny_faces.jpg" alt="Dumbo" />
+            <div class="profile-glow"></div>
+          </div>
+          <span class="profile-label">Dumbo</span>
+          <span class="profile-sub">IQ: present, barely</span>
+        </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     SCREEN 1: INTRO
-     ══════════════════════════════════════════════════════════ -->
-<section id="screen-intro" class="screen active" role="main" aria-label="Welcome screen">
-  <p class="intro-mark">A Private Memory Film</p>
-  <h1 class="intro-title">Made for<br><span class="intro-name">Jahnavi.</span></h1>
-  <p class="intro-sub">Only for your eyes. No one else.</p>
-  <p class="intro-tap">Tap anywhere to begin</p>
-</section>
+        <div class="profile-card" data-name="Sleepyhead" onclick="selectProfile(this)">
+          <div class="profile-img-wrap">
+            <img src="closeup_cheek.jpg" alt="Sleepyhead" />
+            <div class="profile-glow"></div>
+          </div>
+          <span class="profile-label">Sleepyhead</span>
+          <span class="profile-sub">Napping professionally</span>
+        </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     SCREEN 2: PROFILE SELECTION
-     ══════════════════════════════════════════════════════════ -->
-<section id="screen-profiles" class="screen" role="region" aria-label="Choose your mood">
-  <p class="profiles-eyebrow">Private Memory Film</p>
-  <h2 class="profiles-title">Who's watching?</h2>
+        <div class="profile-card" data-name="Idiot" onclick="selectProfile(this)">
+          <div class="profile-img-wrap">
+            <img src="mall_selfie.jpg" alt="Idiot" />
+            <div class="profile-glow"></div>
+          </div>
+          <span class="profile-label">Idiot</span>
+          <span class="profile-sub">My favourite one</span>
+        </div>
 
-  <div class="profiles-grid" role="list">
-
-    <button class="profile-card" data-profile="dosa" role="listitem" aria-label="Dosa — the one who actually finishes the food">
-      <img src="images/idiot_dosa_story.jpg" alt="Dosa" loading="eager">
-      <div class="profile-card-overlay"></div>
-      <div class="profile-card-tint card-warm"></div>
-      <div class="profile-card-name">
-        <span class="profile-name-emoji">😊</span>
-        <span class="profile-name-text">Dosa</span>
-        <span class="profile-name-sub">the food critic</span>
       </div>
-    </button>
-
-    <button class="profile-card" data-profile="dumbo" role="listitem" aria-label="Dumbo — the dramatic one">
-      <img src="images/funny_faces.jpg" alt="Dumbo" loading="eager">
-      <div class="profile-card-overlay"></div>
-      <div class="profile-card-tint card-rose"></div>
-      <div class="profile-card-name">
-        <span class="profile-name-emoji">🐘</span>
-        <span class="profile-name-text">Dumbo</span>
-        <span class="profile-name-sub">the dramatic one</span>
-      </div>
-    </button>
-
-    <button class="profile-card" data-profile="sleepyhead" role="listitem" aria-label="Sleepyhead — professional napper">
-      <img src="images/closeup_cheek.jpg" alt="Sleepyhead" loading="eager">
-      <div class="profile-card-overlay"></div>
-      <div class="profile-card-tint card-teal"></div>
-      <div class="profile-card-name">
-        <span class="profile-name-emoji">😴</span>
-        <span class="profile-name-text">Sleepyhead</span>
-        <span class="profile-name-sub">professional napper</span>
-      </div>
-    </button>
-
-    <button class="profile-card" data-profile="idiot" role="listitem" aria-label="Idiot — but in the best way">
-      <img src="images/mall_selfie.jpg" alt="Idiot" loading="eager">
-      <div class="profile-card-overlay"></div>
-      <div class="profile-card-tint card-indigo"></div>
-      <div class="profile-card-name">
-        <span class="profile-name-emoji">🙄</span>
-        <span class="profile-name-text">Idiot</span>
-        <span class="profile-name-sub">but in the best way</span>
-      </div>
-    </button>
-
-  </div>
-
-  <p class="profiles-bottom">All roads lead to the same memory</p>
-</section>
-
-<!-- ══════════════════════════════════════════════════════════
-     SCREEN 3: STORY VIEWER
-     ══════════════════════════════════════════════════════════ -->
-<section id="screen-stories" class="screen" role="region" aria-label="Memory stories">
-
-  <!-- Progress bars -->
-  <div class="progress-bar-container" role="progressbar" aria-label="Story progress" id="progress-container"></div>
-
-  <!-- Top bar -->
-  <div class="story-topbar">
-    <div class="story-profile-info">
-      <div class="story-avatar"><img id="avatar-img" src="" alt="Profile"></div>
-      <div>
-        <div class="story-profile-name" id="story-profile-name">Jahnavi</div>
-        <div class="story-profile-time">2020 – Present</div>
-      </div>
-    </div>
-    <button class="story-close-btn" id="close-stories" aria-label="Back to profiles">✕</button>
-  </div>
-
-  <!-- Tap zones -->
-  <div class="tap-prev" id="tap-prev" aria-label="Previous memory"></div>
-  <div class="tap-next" id="tap-next" aria-label="Next memory"></div>
-  <div class="tap-flash left" id="flash-left"></div>
-  <div class="tap-flash right" id="flash-right"></div>
-
-  <!-- Stories injected by JS -->
-  <div id="slides-container"></div>
-
-</section>
-
-<!-- ══════════════════════════════════════════════════════════
-     SCREEN 4: FINAL LETTER
-     ══════════════════════════════════════════════════════════ -->
-<section id="screen-letter" class="screen" role="region" aria-label="Final letter">
-  <div class="letter-bg" aria-hidden="true"></div>
-  <div class="letter-scroll">
-    <p class="letter-preamble">For your eyes only</p>
-    <div class="letter-divider" aria-hidden="true"></div>
-
-    <article class="letter-paper" role="article">
-      <span class="letter-salutation">Hey you,</span>
-
-      <div class="letter-body">
-        <p class="emotional">Thank you for being there.</p>
-
-        <p>Thank you for staying — through the good phases and the bad ones. Through the days I was a lot, and the days I wasn't enough.</p>
-
-        <p class="emotional">I know I wasn't always the best friend you deserved.<br>
-        I know I made mistakes.<br>
-        I know there were moments I could have done better.</p>
-
-        <p>But even after all of that — somehow you stayed.</p>
-
-        <p>Thank you for every conversation that went way too long.<br>
-        Thank you for every laugh that didn't make sense to anyone else.<br>
-        Thank you for every roast that I deserved.<br>
-        Thank you for every random memory that I still think about.</p>
-
-        <p class="emotional">And thank you for being one of the few people who made life genuinely better, simply by being in it.</p>
-
-        <p>No matter where life takes us next, I genuinely hope you stay exactly the way you are.</p>
-
-        <p>
-          <span class="funny">A little dramatic.</span><br>
-          <span class="funny">A little annoying.</span><br>
-          <span class="funny">A little sleepy.</span><br>
-          <span class="funny">A little idiot.</span>
-        </p>
-
-        <p><span class="emphasis">But completely unforgettable.</span></p>
-      </div>
-
-      <div class="letter-closing">
-        <span style="font-family:var(--sans);font-size:13px;color:rgba(240,237,232,0.5)">With love (and a lot of roasting),</span>
-        <span class="letter-sign">Your annoying best friend ♡</span>
-      </div>
-    </article>
-
-    <div class="letter-footer">
-      <button class="replay-btn" id="replay-btn" aria-label="Watch again">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <polyline points="1 4 1 10 7 10"></polyline>
-          <path d="M3.51 15a9 9 0 1 0 .49-4.5"></path>
-        </svg>
-        Watch again
-      </button>
-      <p class="letter-date">2020 – Forever</p>
+      <p class="intro-hint">tap any card to begin</p>
     </div>
   </div>
-</section>
 
-<!-- ══════════════════════════════════════════════════════════
-     MUSIC PLAYER
-     ══════════════════════════════════════════════════════════ -->
-<div id="music-player" role="complementary" aria-label="Music player">
-  <button class="music-play-btn" id="music-toggle" aria-label="Play ambient music">
-    <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-    <svg id="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-  </button>
-  <div class="music-info">
-    <span class="music-title">Memory Tape</span>
-    <span class="music-sub">ambient · lo-fi</span>
+  <!-- ══════════════════════════════════════════
+       LOADING / TITLE CARD
+  ══════════════════════════════════════════ -->
+  <div id="screen-loading" class="screen screen-loading">
+    <div class="loading-bar-wrap">
+      <div class="loading-bar"></div>
+    </div>
+    <div class="loading-label" id="loading-label">Loading your memories…</div>
+    <div class="title-card-reveal">
+      <div class="title-card-year">2020 — Present</div>
+      <h2 class="title-card-name" id="title-card-name">Jahnavi</h2>
+      <div class="title-card-tagline">A film about the most annoying, wonderful person I know.</div>
+    </div>
   </div>
-  <div class="music-bars paused" id="music-bars" aria-hidden="true">
-    <div class="music-bar"></div>
-    <div class="music-bar"></div>
-    <div class="music-bar"></div>
-    <div class="music-bar"></div>
+
+  <!-- ══════════════════════════════════════════
+       MAIN STORY WRAPPER
+  ══════════════════════════════════════════ -->
+  <div id="screen-story" class="screen screen-story">
+
+    <!-- Progress bar -->
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <!-- Slide counter -->
+    <div class="slide-counter" id="slide-counter">1 / 8</div>
+
+    <!-- ── SLIDES ── -->
+    <div class="slides-container" id="slides-container">
+
+      <!-- SLIDE 1 — HERO -->
+      <div class="slide slide-hero" data-index="0">
+        <div class="slide-bg">
+          <img src="hero_fairy_light.jpg" alt="" class="slide-bg-img" />
+          <div class="slide-bg-overlay overlay-deep"></div>
+        </div>
+        <div class="slide-content slide-content--center">
+          <div class="slide-eyebrow mono">Chapter One</div>
+          <h2 class="slide-title display-xl">The one who<br/><em>showed up.</em></h2>
+          <p class="slide-caption">Not every friendship starts with a grand moment.<br/>Some start with someone just… being there.<br/>Annoyingly, consistently there.</p>
+        </div>
+        <div class="slide-scroll-hint">↓</div>
+      </div>
+
+      <!-- SLIDE 2 — WHITE DRESS -->
+      <div class="slide slide-portrait" data-index="1">
+        <div class="slide-bg">
+          <img src="white_dress.jpg" alt="" class="slide-bg-img" />
+          <div class="slide-bg-overlay overlay-left"></div>
+        </div>
+        <div class="slide-content slide-content--left">
+          <div class="slide-eyebrow mono">Exhibit A</div>
+          <h2 class="slide-title display-lg">The effort<br/>she makes.</h2>
+          <p class="slide-caption">When she actually gets ready, she looks like<br/>she should be on a mood board somewhere.<br/>Then she opens her mouth and ruins it.</p>
+          <div class="slide-stat-card">
+            <span class="stat-number">10</span>
+            <span class="stat-label">out of 10<br/>would still be friends</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3 — SAREE SMILE -->
+      <div class="slide slide-portrait" data-index="2">
+        <div class="slide-bg">
+          <img src="saree_smile.jpg" alt="" class="slide-bg-img slide-bg-img--right" />
+          <div class="slide-bg-overlay overlay-right"></div>
+        </div>
+        <div class="slide-content slide-content--right">
+          <div class="slide-eyebrow mono">The smile</div>
+          <h2 class="slide-title display-lg">That laugh<br/>though.</h2>
+          <p class="slide-caption">The kind that fills up a room.<br/>The kind that's impossible to fake.<br/>The kind that makes everyone else start laughing too<br/>even when the joke wasn't that funny.</p>
+        </div>
+      </div>
+
+      <!-- SLIDE 4 — CLOSEUP / ROAST CARD -->
+      <div class="slide slide-centered" data-index="3">
+        <div class="slide-bg slide-bg--color bg-dark-warm"></div>
+        <div class="slide-content slide-content--center">
+          <div class="slide-eyebrow mono">An honest assessment</div>
+          <h2 class="slide-title display-lg">Things she is<br/><em>terrible</em> at.</h2>
+          <div class="roast-list">
+            <div class="roast-item">
+              <span class="roast-num mono">01</span>
+              <span>Being on time. To anything. Ever.</span>
+            </div>
+            <div class="roast-item">
+              <span class="roast-num mono">02</span>
+              <span>Replying to texts within the same century.</span>
+            </div>
+            <div class="roast-item">
+              <span class="roast-num mono">03</span>
+              <span>Pretending she's "almost ready" when she hasn't even started.</span>
+            </div>
+            <div class="roast-item">
+              <span class="roast-num mono">04</span>
+              <span>Making decisions. Any decisions. What do you want to eat, Jahnavi?</span>
+            </div>
+            <div class="roast-item">
+              <span class="roast-num mono">05</span>
+              <span>Staying awake past 10pm like a functioning adult.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5 — FUNNY FACES / NAVRATRI -->
+      <div class="slide slide-diptych" data-index="4">
+        <div class="slide-bg">
+          <img src="navratri_mirror.jpg" alt="" class="slide-bg-img" />
+          <div class="slide-bg-overlay overlay-deep"></div>
+        </div>
+        <div class="slide-content slide-content--center">
+          <div class="slide-eyebrow mono">Navratri era</div>
+          <h2 class="slide-title display-lg">Professional<br/>chaos in a<br/>mirror selfie.</h2>
+          <p class="slide-caption">She looked incredible. She knew it.<br/>She made sure everyone knew she knew it.<br/>Honestly? Valid.</p>
+        </div>
+      </div>
+
+      <!-- SLIDE 6 — THE HUG -->
+      <div class="slide slide-hero" data-index="5">
+        <div class="slide-bg">
+          <img src="bestfriend_hug.jpg" alt="" class="slide-bg-img" />
+          <div class="slide-bg-overlay overlay-deep"></div>
+        </div>
+        <div class="slide-content slide-content--center">
+          <div class="slide-eyebrow mono">The real thing</div>
+          <h2 class="slide-title display-xl">This one.<br/><em>Always.</em></h2>
+          <p class="slide-caption">There's no version of the good memories<br/>where she isn't in them.</p>
+        </div>
+      </div>
+
+      <!-- SLIDE 7 — DOSA STORY -->
+      <div class="slide slide-portrait" data-index="6">
+        <div class="slide-bg">
+          <img src="idiot_dosa_story.jpg" alt="" class="slide-bg-img" />
+          <div class="slide-bg-overlay overlay-left"></div>
+        </div>
+        <div class="slide-content slide-content--left">
+          <div class="slide-eyebrow mono">The dosa incident</div>
+          <h2 class="slide-title display-lg">I cannot<br/>believe her.</h2>
+          <p class="slide-caption">She ordered a dosa. Took two bites.<br/>Declared she was "done."<br/>This is the person I chose. This is my life now.</p>
+          <div class="slide-stat-card">
+            <span class="stat-number">2</span>
+            <span class="stat-label">bites.<br/>two. bites.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 8 — FINAL LETTER -->
+      <div class="slide slide-letter" data-index="7">
+        <div class="slide-bg slide-bg--color bg-dark-letter"></div>
+        <div class="slide-content slide-content--letter">
+          <div class="slide-eyebrow mono">And finally —</div>
+          <h2 class="letter-heading">The part I actually<br/>mean.</h2>
+
+          <div class="letter-body">
+            <p>Okay. I'm going to be real for a second, which is uncomfortable for me so bear with it.</p>
+
+            <p>You're one of the most annoying people I've ever been friends with. You take forever to get ready, you have strong opinions about everything except what to eat for dinner, and you will send me a 7-minute voice note when a single text would have been fine.</p>
+
+            <p>And yet.</p>
+
+            <p>You're also the person I want to tell things to first. The one who laughs at the same dumb stuff I do. The one who shows up — actually shows up — when it matters. Not with advice, not with a solution, just with presence. That's rarer than you think.</p>
+
+            <p>I've watched you grow into someone who knows who she is and doesn't apologise for it. That's not nothing. That's actually really hard. You've done it in a way that's somehow still warm and funny and completely yourself.</p>
+
+            <p>I don't say this kind of thing often. Mostly because I'd never let you live it down. But you deserve to hear it in full, somewhere, at least once:</p>
+
+            <p class="letter-emphasis">You matter. A lot. Specifically to me.</p>
+
+            <p>Thanks for being my person. You absolute idiot.</p>
+
+            <p class="letter-sign">— Always,<br/>Your best friend 🤍</p>
+          </div>
+
+          <div class="letter-footer">
+            <button class="replay-btn" onclick="restartExperience()">
+              <span>↺</span> Watch again
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /slides-container -->
+
+    <!-- Navigation -->
+    <button class="nav-btn nav-prev" id="nav-prev" onclick="prevSlide()" aria-label="Previous">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button class="nav-btn nav-next" id="nav-next" onclick="nextSlide()" aria-label="Next">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M8 4L14 10L8 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <!-- Dot navigation -->
+    <div class="dot-nav" id="dot-nav"></div>
+
+  </div><!-- /screen-story -->
+
+  <!-- ══════════════════════════════════════════
+       MUSIC PLAYER
+  ══════════════════════════════════════════ -->
+  <div class="music-player" id="music-player">
+    <audio id="audio" loop>
+      <source src="audio/song.mp3" type="audio/mpeg" />
+    </audio>
+    <button class="music-btn" id="music-btn" onclick="toggleMusic()" aria-label="Play/Pause music">
+      <div class="music-vinyl" id="music-vinyl">
+        <div class="vinyl-center"></div>
+      </div>
+      <div class="music-wave" id="music-wave">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </button>
+    <div class="music-tooltip" id="music-tooltip">Play music</div>
   </div>
-</div>
 
-<!-- Hidden audio element — user must interact first -->
-<audio id="bg-audio" loop preload="none">
-  <!-- Fallback: generated tone via Web Audio if no file -->
-</audio>
+  <!-- Transition overlay -->
+  <div class="transition-overlay" id="transition-overlay"></div>
 
-<script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
