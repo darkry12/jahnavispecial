@@ -13,63 +13,81 @@
 
 <canvas id="particle-canvas"></canvas>
 
-<!-- ═══════════════════════════
-     SCREEN: PROFILE SELECTOR
-═══════════════════════════ -->
+<!-- ═══════════════════════════════════
+     PROFILE SELECTOR
+═══════════════════════════════════ -->
 <div id="screen-intro" class="screen active">
-  <div class="nf-bg"></div>
   <div class="nf-logo">J</div>
+  <div class="nf-glow-top"></div>
 
   <div class="nf-body">
+    <p class="nf-eyebrow">A private film, made just for you</p>
     <p class="nf-who">Who's watching?</p>
 
-    <div class="nf-grid">
+    <div class="nf-grid" id="nf-grid">
 
-      <button type="button" class="nf-card" data-name="Dosa">
-        <div class="nf-card-img">
-          <img src="images/idiot_dosa_story.jpg" alt="Dosa" onerror="this.style.display='none'"/>
-          <div class="nf-card-overlay"></div>
+      <!-- Each card is a plain DIV with a full-cover tap target -->
+      <div class="nf-card" data-name="Dosa">
+        <div class="nf-card-inner">
+          <img src="images/idiot_dosa_story.jpg" alt="Dosa" class="nf-card-photo" onerror="this.style.opacity='0'"/>
+          <div class="nf-card-shine"></div>
+          <div class="nf-card-grad"></div>
+          <div class="nf-card-badge">🫶</div>
         </div>
         <span class="nf-card-name">Dosa</span>
-        <span class="nf-card-sub">The smiley one 🫶</span>
-      </button>
+        <span class="nf-card-sub">The smiley one</span>
+        <!-- Full-cover transparent tap target — nothing blocks this -->
+        <div class="nf-tap"></div>
+      </div>
 
-      <button type="button" class="nf-card" data-name="Dumbo">
-        <div class="nf-card-img">
-          <img src="images/funny_faces.jpg" alt="Dumbo" onerror="this.style.display='none'"/>
-          <div class="nf-card-overlay"></div>
+      <div class="nf-card" data-name="Dumbo">
+        <div class="nf-card-inner">
+          <img src="images/funny_faces.jpg" alt="Dumbo" class="nf-card-photo" onerror="this.style.opacity='0'"/>
+          <div class="nf-card-shine"></div>
+          <div class="nf-card-grad"></div>
+          <div class="nf-card-badge">🌸</div>
         </div>
         <span class="nf-card-name">Dumbo</span>
-        <span class="nf-card-sub">The silly one 🌸</span>
-      </button>
+        <span class="nf-card-sub">The silly one</span>
+        <div class="nf-tap"></div>
+      </div>
 
-      <button type="button" class="nf-card" data-name="Sleepyhead">
-        <div class="nf-card-img">
-          <img src="images/closeup_cheek.jpg" alt="Sleepyhead" onerror="this.style.display='none'"/>
-          <div class="nf-card-overlay"></div>
+      <div class="nf-card" data-name="Sleepyhead">
+        <div class="nf-card-inner">
+          <img src="images/closeup_cheek.jpg" alt="Sleepyhead" class="nf-card-photo" onerror="this.style.opacity='0'"/>
+          <div class="nf-card-shine"></div>
+          <div class="nf-card-grad"></div>
+          <div class="nf-card-badge">🌙</div>
         </div>
         <span class="nf-card-name">Sleepyhead</span>
-        <span class="nf-card-sub">The cute one 🌙</span>
-      </button>
+        <span class="nf-card-sub">The cute one</span>
+        <div class="nf-tap"></div>
+      </div>
 
-      <button type="button" class="nf-card" data-name="Jahnavi">
-        <div class="nf-card-img">
-          <img src="images/mall_selfie.jpg" alt="Jahnavi" onerror="this.style.display='none'"/>
-          <div class="nf-card-overlay"></div>
+      <div class="nf-card" data-name="Jahnavi">
+        <div class="nf-card-inner">
+          <img src="images/mall_selfie.jpg" alt="Jahnavi" class="nf-card-photo" onerror="this.style.opacity='0'"/>
+          <div class="nf-card-shine"></div>
+          <div class="nf-card-grad"></div>
+          <div class="nf-card-badge">✨</div>
         </div>
         <span class="nf-card-name">Jahnavi</span>
-        <span class="nf-card-sub">My favourite ✨</span>
-      </button>
+        <span class="nf-card-sub">My favourite</span>
+        <div class="nf-tap"></div>
+      </div>
 
     </div>
 
     <p class="nf-hint">tap your name to begin</p>
   </div>
+
+  <!-- ripple container injected by JS -->
+  <div id="ripple-host"></div>
 </div>
 
-<!-- ═══════════════════════════
-     SCREEN: LOADING
-═══════════════════════════ -->
+<!-- ═══════════════════════════════════
+     LOADING
+═══════════════════════════════════ -->
 <div id="screen-loading" class="screen">
   <div class="ld-bar-track"><div class="ld-bar" id="ld-bar"></div></div>
   <div class="ld-center">
@@ -80,16 +98,14 @@
   <p class="ld-label" id="ld-label">Preparing something special…</p>
 </div>
 
-<!-- ═══════════════════════════
-     SCREEN: STORY
-═══════════════════════════ -->
+<!-- ═══════════════════════════════════
+     STORY
+═══════════════════════════════════ -->
 <div id="screen-story" class="screen">
 
-  <!-- top chrome -->
   <div class="story-progress"><div class="story-progress-fill" id="prog-fill"></div></div>
   <div class="story-counter" id="story-counter">1 / 8</div>
 
-  <!-- slides -->
   <div class="slides-wrap" id="slides-wrap">
 
     <!-- SLIDE 1: HERO -->
@@ -110,7 +126,7 @@
       <div class="sl-hint s5">swipe or tap →</div>
     </div>
 
-    <!-- SLIDE 2: WHITE DRESS -->
+    <!-- SLIDE 2 -->
     <div class="slide" data-i="1">
       <div class="sl-bg">
         <img src="images/white_dress.jpg" class="sl-img kb-up" onerror="this.style.opacity='0'"/>
@@ -129,7 +145,7 @@
       </div>
     </div>
 
-    <!-- SLIDE 3: SAREE SMILE -->
+    <!-- SLIDE 3 -->
     <div class="slide" data-i="2">
       <div class="sl-bg">
         <img src="images/saree_smile.jpg" class="sl-img kb-left" onerror="this.style.opacity='0'"/>
@@ -145,7 +161,7 @@
       </div>
     </div>
 
-    <!-- SLIDE 4: THINGS ABOUT YOU -->
+    <!-- SLIDE 4 -->
     <div class="slide" data-i="3">
       <div class="sl-bg dark-warm">
         <div class="orb o1"></div>
@@ -164,7 +180,7 @@
       </div>
     </div>
 
-    <!-- SLIDE 5: NAVRATRI -->
+    <!-- SLIDE 5 -->
     <div class="slide" data-i="4">
       <div class="sl-bg">
         <img src="images/navratri_mirror.jpg" class="sl-img kb-right" onerror="this.style.opacity='0'"/>
@@ -179,7 +195,7 @@
       </div>
     </div>
 
-    <!-- SLIDE 6: BESTFRIEND HUG — rewritten about HER, not "us" -->
+    <!-- SLIDE 6 -->
     <div class="slide" data-i="5">
       <div class="sl-bg">
         <img src="images/bestfriend_hug.jpg" class="sl-img kb-up" onerror="this.style.opacity='0'"/>
@@ -188,15 +204,14 @@
       <div class="sl-body center">
         <span class="sl-tag s1">The way you love</span>
         <h2 class="sl-h s2">She loves<br/><em>fully.</em></h2>
-        <p class="sl-p s3">This photo says it all.
-        When she loves someone, she loves them completely.
+        <p class="sl-p s3">When she loves someone, she loves them completely.
         No half-measures, no holding back.
         That is one of the most beautiful things about her.</p>
         <div class="sl-heart s4">🤍</div>
       </div>
     </div>
 
-    <!-- SLIDE 7: HER CUTENESS -->
+    <!-- SLIDE 7 -->
     <div class="slide" data-i="6">
       <div class="sl-bg">
         <img src="images/idiot_dosa_story.jpg" class="sl-img kb-left" onerror="this.style.opacity='0'"/>
@@ -215,7 +230,7 @@
       </div>
     </div>
 
-    <!-- SLIDE 8: FINAL LETTER -->
+    <!-- SLIDE 8: LETTER -->
     <div class="slide slide-letter" data-i="7">
       <div class="sl-bg dark-letter">
         <div class="orb o3"></div>
@@ -234,36 +249,33 @@
           <p class="letter-sign">— With so much love,<br/>Your person 🤍</p>
         </div>
         <div class="letter-foot s4">
-          <button class="replay-btn" onclick="restartExperience()">↺ &nbsp;Watch again</button>
+          <div class="replay-btn" id="replay-btn">↺ &nbsp;Watch again</div>
         </div>
       </div>
     </div>
 
-  </div><!-- /slides-wrap -->
+  </div>
 
-  <!-- nav arrows -->
-  <button class="nav-arr prev" id="nav-prev" onclick="prevSlide()">
+  <div class="nav-arr prev" id="nav-prev">
     <svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </button>
-  <button class="nav-arr next" id="nav-next" onclick="nextSlide()">
+  </div>
+  <div class="nav-arr next" id="nav-next">
     <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </button>
+  </div>
 
-  <!-- dot nav -->
   <div class="dot-row" id="dot-row"></div>
 
-</div><!-- /screen-story -->
+</div>
 
 <!-- MUSIC -->
 <div class="music-wrap" id="music-wrap">
   <audio id="audio" loop><source src="audio/song.mp3" type="audio/mpeg"/></audio>
-  <button class="music-btn" id="music-btn" onclick="toggleMusic()" aria-label="Toggle music">
+  <div class="music-btn" id="music-btn">
     <div class="mv" id="mv"><div class="mv-ring"></div><div class="mv-dot"></div></div>
     <div class="mw" id="mw"><span></span><span></span><span></span><span></span><span></span></div>
-  </button>
+  </div>
 </div>
 
-<!-- fade overlay -->
 <div class="fade-overlay" id="fade-overlay"></div>
 
 <script src="script.js"></script>
