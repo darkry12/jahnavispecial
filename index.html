@@ -18,13 +18,9 @@ html,body{
 }
 
 /* ── SCREENS ── */
-.screen{
-  position:fixed;top:0;left:0;right:0;bottom:0;
-  z-index:1;opacity:0;pointer-events:none;
-  transition:opacity .7s ease;
-}
-.screen.active{opacity:1;pointer-events:all;z-index:10}
-.screen.out{opacity:0;pointer-events:none;z-index:5}
+.screen{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;z-index:1!important;opacity:0!important;pointer-events:none!important;transition:opacity .7s ease!important;}
+.screen.active{opacity:1!important;pointer-events:all!important;z-index:10!important;visibility:visible!important;display:flex!important;}
+.screen.out{opacity:0!important;pointer-events:none!important;z-index:5!important;}
 
 /* ══════════════════════════════════════
    PROFILE SCREEN
@@ -370,7 +366,3 @@ html,body{
 
 /* ── DESKTOP ── */
 @media(min-width:769px){
-  .sl-body.left{max-width:52%;justify-content:center}
-  .sl-body.right{max-width:52%;margin-left:auto;justify-content:center}
-  .card-grid{grid-template-columns:repeat(4,1fr)}
-  .intro-wrap{max
