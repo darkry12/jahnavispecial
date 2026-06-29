@@ -6,278 +6,371 @@
   <title>For Jahnavi</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+/* ── BASE ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  width:100%;height:100%;overflow:hidden;
+  background:#000;color:#f0ebe0;
+  font-family:'Inter',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
 
-<canvas id="particle-canvas"></canvas>
+/* ── SCREENS ── */
+.screen{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  z-index:1;opacity:0;pointer-events:none;
+  transition:opacity .7s ease;
+}
+.screen.active{opacity:1;pointer-events:all;z-index:10}
+.screen.out{opacity:0;pointer-events:none;z-index:5}
 
-<!-- ═══════════════════════════════════
-     PROFILE SELECTOR
-═══════════════════════════════════ -->
-<div id="screen-intro" class="screen active">
-  <div class="nf-logo">J</div>
-  <div class="nf-glow-top"></div>
+/* ══════════════════════════════════════
+   PROFILE SCREEN
+══════════════════════════════════════ */
+#screen-intro{
+  background:#000;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:0;
+  /* scanline overlay */
+  background-image:repeating-linear-gradient(
+    0deg,transparent,transparent 3px,rgba(255,255,255,.012) 3px,rgba(255,255,255,.012) 4px
+  );
+}
 
-  <div class="nf-body">
-    <p class="nf-eyebrow">A private film, made just for you</p>
-    <p class="nf-who">Who's watching?</p>
+/* top-left J logo */
+.nf-logo{
+  position:absolute;
+  top:calc(1rem + env(safe-area-inset-top,0px));
+  left:calc(1.2rem + env(safe-area-inset-left,0px));
+  font-family:'Playfair Display',serif;
+  font-size:2.2rem;font-weight:900;
+  color:#e50914;letter-spacing:-.02em;
+  z-index:5;
+  animation:dropIn .6s cubic-bezier(.16,1,.3,1) .1s both;
+}
+@keyframes dropIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
 
-    <div class="nf-grid" id="nf-grid">
+/* subtle red top glow */
+.intro-glow{
+  position:absolute;top:0;left:0;right:0;height:200px;
+  background:radial-gradient(ellipse at 50% 0%,rgba(229,9,20,.07) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
 
-      <!-- Each card is a plain DIV with a full-cover tap target -->
-      <div class="nf-card" data-name="Dosa">
-        <div class="nf-card-inner">
-          <img src="images/idiot_dosa_story.jpg" alt="Dosa" class="nf-card-photo" onerror="this.style.opacity='0'"/>
-          <div class="nf-card-shine"></div>
-          <div class="nf-card-grad"></div>
-          <div class="nf-card-badge">🫶</div>
-        </div>
-        <span class="nf-card-name">Dosa</span>
-        <span class="nf-card-sub">The smiley one</span>
-        <!-- Full-cover transparent tap target — nothing blocks this -->
-        <div class="nf-tap"></div>
-      </div>
+/* main content wrapper */
+.intro-wrap{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  width:100%;max-width:480px;
+  padding:
+    calc(5rem + env(safe-area-inset-top,0px))
+    1.5rem
+    calc(2rem + env(safe-area-inset-bottom,0px));
+  gap:1.6rem;
+}
 
-      <div class="nf-card" data-name="Dumbo">
-        <div class="nf-card-inner">
-          <img src="images/funny_faces.jpg" alt="Dumbo" class="nf-card-photo" onerror="this.style.opacity='0'"/>
-          <div class="nf-card-shine"></div>
-          <div class="nf-card-grad"></div>
-          <div class="nf-card-badge">🌸</div>
-        </div>
-        <span class="nf-card-name">Dumbo</span>
-        <span class="nf-card-sub">The silly one</span>
-        <div class="nf-tap"></div>
-      </div>
+.intro-eyebrow{
+  font-family:'DM Mono',monospace;
+  font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(201,169,110,.65);
+  animation:fadeUp .6s cubic-bezier(.16,1,.3,1) .2s both;
+}
+.intro-title{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(1.6rem,5vw,2rem);
+  font-weight:400;color:#f0ebe0;
+  letter-spacing:-.01em;text-align:center;
+  animation:fadeUp .7s cubic-bezier(.16,1,.3,1) .32s both;
+}
 
-      <div class="nf-card" data-name="Sleepyhead">
-        <div class="nf-card-inner">
-          <img src="images/closeup_cheek.jpg" alt="Sleepyhead" class="nf-card-photo" onerror="this.style.opacity='0'"/>
-          <div class="nf-card-shine"></div>
-          <div class="nf-card-grad"></div>
-          <div class="nf-card-badge">🌙</div>
-        </div>
-        <span class="nf-card-name">Sleepyhead</span>
-        <span class="nf-card-sub">The cute one</span>
-        <div class="nf-tap"></div>
-      </div>
+/* ── THE GRID ── */
+.card-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1rem;
+  width:100%;
+  animation:fadeUp .7s cubic-bezier(.16,1,.3,1) .44s both;
+}
 
-      <div class="nf-card" data-name="Jahnavi">
-        <div class="nf-card-inner">
-          <img src="images/mall_selfie.jpg" alt="Jahnavi" class="nf-card-photo" onerror="this.style.opacity='0'"/>
-          <div class="nf-card-shine"></div>
-          <div class="nf-card-grad"></div>
-          <div class="nf-card-badge">✨</div>
-        </div>
-        <span class="nf-card-name">Jahnavi</span>
-        <span class="nf-card-sub">My favourite</span>
-        <div class="nf-tap"></div>
-      </div>
+/* ── SINGLE CARD ──
+   The ENTIRE card is one element with a single onclick.
+   No children intercept events.
+   z-index stacking is flat — no child is above parent.
+── */
+.pcard{
+  position:relative;
+  border-radius:12px;
+  overflow:hidden;                  /* clips photo + overlays */
+  background:#1a1a1a;
+  cursor:pointer;
+  aspect-ratio:3/4;                 /* ALL cards same ratio */
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1),
+             box-shadow .35s ease;
+  /* tap highlight off */
+  -webkit-tap-highlight-color:transparent;
+  outline:none;
+  /* CRITICAL: don't let any child steal the event */
+  -webkit-user-select:none;user-select:none;
+}
 
-    </div>
+/* photo — fills card, pointer-events off */
+.pcard-photo{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  pointer-events:none;
+  transition:transform .5s ease;
+}
 
-    <p class="nf-hint">tap your name to begin</p>
-  </div>
+/* dark gradient at bottom — pointer-events off */
+.pcard-grad{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,
+    rgba(0,0,0,.0) 30%,
+    rgba(0,0,0,.55) 65%,
+    rgba(0,0,0,.88) 100%
+  );
+  pointer-events:none;
+}
 
-  <!-- ripple container injected by JS -->
-  <div id="ripple-host"></div>
-</div>
+/* text at bottom of card — pointer-events off */
+.pcard-text{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:.7rem .8rem .75rem;
+  pointer-events:none;
+  display:flex;flex-direction:column;gap:.2rem;
+}
+.pcard-name{
+  font-family:'Inter',sans-serif;
+  font-size:.95rem;font-weight:600;
+  color:#f0ebe0;letter-spacing:.01em;
+  line-height:1.2;
+}
+.pcard-sub{
+  font-family:'DM Mono',monospace;
+  font-size:.56rem;letter-spacing:.06em;
+  color:rgba(240,235,224,.45);
+  line-height:1;
+}
 
-<!-- ═══════════════════════════════════
-     LOADING
-═══════════════════════════════════ -->
-<div id="screen-loading" class="screen">
-  <div class="ld-bar-track"><div class="ld-bar" id="ld-bar"></div></div>
-  <div class="ld-center">
-    <div class="ld-year">Made with love · 2024</div>
-    <h1 class="ld-name" id="ld-name">Jahnavi</h1>
-    <p class="ld-tagline">A film for someone who means everything.</p>
-  </div>
-  <p class="ld-label" id="ld-label">Preparing something special…</p>
-</div>
+/* shimmer — pointer-events off */
+.pcard-shine{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.06) 0%,transparent 50%);
+  pointer-events:none;
+  opacity:0;transition:opacity .3s ease;
+}
 
-<!-- ═══════════════════════════════════
-     STORY
-═══════════════════════════════════ -->
-<div id="screen-story" class="screen">
+/* gold border ring — pointer-events off */
+.pcard-ring{
+  position:absolute;inset:0;border-radius:12px;
+  border:2px solid transparent;
+  pointer-events:none;
+  transition:border-color .3s ease,box-shadow .3s ease;
+}
 
-  <div class="story-progress"><div class="story-progress-fill" id="prog-fill"></div></div>
-  <div class="story-counter" id="story-counter">1 / 8</div>
+/* ── hover / active ── */
+.pcard:hover{transform:translateY(-6px) scale(1.03)}
+.pcard:hover .pcard-photo{transform:scale(1.05)}
+.pcard:hover .pcard-shine{opacity:1}
+.pcard:hover .pcard-ring{
+  border-color:rgba(201,169,110,.5);
+  box-shadow:0 0 20px rgba(201,169,110,.2);
+}
+.pcard:active{transform:scale(.97)}
 
-  <div class="slides-wrap" id="slides-wrap">
+/* selected state */
+.pcard.sel .pcard-ring{
+  border-color:#c9a96e;
+  box-shadow:0 0 0 3px rgba(201,169,110,.3),0 0 40px rgba(201,169,110,.4);
+  animation:ringFlash .5s ease;
+}
+@keyframes ringFlash{
+  0%  {box-shadow:0 0 0 0 rgba(201,169,110,.8)}
+  50% {box-shadow:0 0 0 8px rgba(201,169,110,.2)}
+  100%{box-shadow:0 0 0 3px rgba(201,169,110,.3),0 0 40px rgba(201,169,110,.4)}
+}
 
-    <!-- SLIDE 1: HERO -->
-    <div class="slide active" data-i="0">
-      <div class="sl-bg">
-        <img src="images/hero_fairy_lights.jpg" class="sl-img kb-right"
-             onerror="this.onerror=null;this.src='images/hero_fairy_light.jpg'"/>
-        <div class="sl-dim dim-full"></div>
-      </div>
-      <div class="sl-body center">
-        <span class="sl-tag s1">Just for you</span>
-        <h2 class="sl-h s2">You are<br/><em>someone special.</em></h2>
-        <p class="sl-p s3">Not everyone gets a film made for them.<br/>
-        But you — you earned this one.<br/>
-        Just by being exactly who you are.</p>
-        <div class="sl-line s4"></div>
-      </div>
-      <div class="sl-hint s5">swipe or tap →</div>
-    </div>
+/* card entrance stagger */
+.pcard:nth-child(1){animation:cardIn .65s cubic-bezier(.16,1,.3,1) .5s both}
+.pcard:nth-child(2){animation:cardIn .65s cubic-bezier(.16,1,.3,1) .62s both}
+.pcard:nth-child(3){animation:cardIn .65s cubic-bezier(.16,1,.3,1) .74s both}
+.pcard:nth-child(4){animation:cardIn .65s cubic-bezier(.16,1,.3,1) .86s both}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(32px) scale(.9)}
+  to  {opacity:1;transform:none}
+}
 
-    <!-- SLIDE 2 -->
-    <div class="slide" data-i="1">
-      <div class="sl-bg">
-        <img src="images/white_dress.jpg" class="sl-img kb-up" onerror="this.style.opacity='0'"/>
-        <div class="sl-dim dim-left"></div>
-      </div>
-      <div class="sl-body left">
-        <span class="sl-tag s1">You in this</span>
-        <h2 class="sl-h s2">The way<br/>you look.</h2>
-        <p class="sl-p s3">There are moments when you walk in somewhere
-        and I genuinely think — she has no idea, does she?
-        No idea how beautiful she actually is.
-        This photo is proof.</p>
-        <div class="sl-quote s4">
-          <span>"She doesn't even try, and she still looks like that."</span>
-        </div>
-      </div>
-    </div>
+.intro-hint{
+  font-family:'DM Mono',monospace;
+  font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(240,235,224,.22);
+  animation:fadeUp .6s ease .95s both,pulse 2.5s ease-in-out 1.5s infinite;
+}
+@keyframes pulse{0%,100%{opacity:.18}50%{opacity:.55}}
 
-    <!-- SLIDE 3 -->
-    <div class="slide" data-i="2">
-      <div class="sl-bg">
-        <img src="images/saree_smile.jpg" class="sl-img kb-left" onerror="this.style.opacity='0'"/>
-        <div class="sl-dim dim-right"></div>
-      </div>
-      <div class="sl-body right">
-        <span class="sl-tag s1">Your smile</span>
-        <h2 class="sl-h s2">This smile<br/>is everything.</h2>
-        <p class="sl-p s3">Whenever you smile like this —
-        genuinely, fully, without thinking about it —
-        the whole room feels different.
-        I hope you know that.</p>
-      </div>
-    </div>
+/* ── RISING PARTICLES ── */
+#star-canvas{
+  position:absolute;inset:0;
+  pointer-events:none;z-index:1;
+  opacity:.7;
+}
 
-    <!-- SLIDE 4 -->
-    <div class="slide" data-i="3">
-      <div class="sl-bg dark-warm">
-        <div class="orb o1"></div>
-        <div class="orb o2"></div>
-      </div>
-      <div class="sl-body center">
-        <span class="sl-tag s1">Things I know for sure</span>
-        <h2 class="sl-h s2">What makes<br/><em>you, you.</em></h2>
-        <ul class="mem-list">
-          <li class="mem-item s3"><span class="mem-ico">🌸</span><span>You make everyone feel comfortable without even trying.</span></li>
-          <li class="mem-item s4"><span class="mem-ico">✨</span><span>Your laugh is contagious. Once you start — everyone starts.</span></li>
-          <li class="mem-item s5"><span class="mem-ico">🤍</span><span>You care so deeply about people. Even when you pretend you don't.</span></li>
-          <li class="mem-item s6"><span class="mem-ico">🌙</span><span>You are the kind of person that is impossible to forget.</span></li>
-          <li class="mem-item s7"><span class="mem-ico">💫</span><span>You have no idea how much you mean to people. That part still gets me.</span></li>
-        </ul>
-      </div>
-    </div>
+/* ════════════════════════════════════════
+   LOADING SCREEN
+════════════════════════════════════════ */
+#screen-loading{
+  background:#000;
+  display:flex;align-items:center;justify-content:center;
+}
+.ld-bar-track{position:absolute;bottom:0;left:0;right:0;height:2px;background:rgba(255,255,255,.05)}
+.ld-bar{height:100%;width:0;background:linear-gradient(90deg,#e50914,#c9a96e,#e8c4b0);box-shadow:0 0 10px rgba(201,169,110,.4);transition:width 2.8s cubic-bezier(.25,.46,.45,.94)}
+.ld-center{display:flex;flex-direction:column;align-items:center;gap:.8rem;padding:0 2rem;text-align:center;opacity:0;transform:translateY(18px);transition:opacity .9s ease,transform .9s ease}
+.ld-center.show{opacity:1;transform:none}
+.ld-year{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.25em;color:#c9a96e;opacity:.8}
+.ld-name{font-family:'Playfair Display',serif;font-size:clamp(3rem,14vw,8rem);font-weight:700;letter-spacing:-.03em;color:#f0ebe0;line-height:.95}
+.ld-tagline{font-family:'Inter',sans-serif;font-size:.86rem;font-weight:300;color:rgba(240,235,224,.5);max-width:280px;line-height:1.7}
+.ld-label{position:absolute;bottom:calc(.9rem + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(240,235,224,.25);white-space:nowrap;transition:opacity .4s ease}
 
-    <!-- SLIDE 5 -->
-    <div class="slide" data-i="4">
-      <div class="sl-bg">
-        <img src="images/navratri_mirror.jpg" class="sl-img kb-right" onerror="this.style.opacity='0'"/>
-        <div class="sl-dim dim-full"></div>
-      </div>
-      <div class="sl-body center">
-        <span class="sl-tag s1">Navratri ✨</span>
-        <h2 class="sl-h s2">You looked<br/>so happy<br/>that day.</h2>
-        <p class="sl-p s3">I love this photo because of your eyes.
-        There's this pure joy in them.
-        That's the version of you I always want to remember.</p>
-      </div>
-    </div>
+/* ════════════════════════════════════════
+   STORY SCREEN
+════════════════════════════════════════ */
+#screen-story{background:#080808;overflow:hidden}
+.story-progress{position:fixed;top:0;left:0;right:0;height:2px;background:rgba(255,255,255,.06);z-index:100}
+.story-progress-fill{height:100%;background:linear-gradient(90deg,#e50914,#c9a96e);box-shadow:0 0 6px rgba(229,9,20,.35);transition:width .55s cubic-bezier(.16,1,.3,1)}
+.story-counter{position:fixed;top:calc(.9rem + env(safe-area-inset-top,0px));right:calc(1rem + env(safe-area-inset-right,0px));font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.15em;color:rgba(240,235,224,.28);z-index:100}
+.slides-wrap{position:absolute;top:0;left:0;right:0;bottom:0}
+.slide{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;overflow:hidden;opacity:0;pointer-events:none}
+.slide.active{opacity:1;pointer-events:all}
+.sl-bg{position:absolute;top:0;left:0;right:0;bottom:0;z-index:0}
+.sl-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center top}
+.slide.active .kb-right{animation:kbR 14s ease forwards}
+.slide.active .kb-left {animation:kbL 14s ease forwards}
+.slide.active .kb-up   {animation:kbU 16s ease forwards}
+@keyframes kbR{from{transform:scale(1.08)}to{transform:scale(1.01) translateX(-10px)}}
+@keyframes kbL{from{transform:scale(1.08)}to{transform:scale(1.01) translateX(10px)}}
+@keyframes kbU{from{transform:scale(1.07)}to{transform:scale(1.01) translateY(-8px)}}
+.sl-dim{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none}
+.dim-full{background:linear-gradient(to bottom,rgba(8,8,8,.1) 0%,rgba(8,8,8,.35) 40%,rgba(8,8,8,.93) 100%)}
+.dim-left{background:linear-gradient(to right,rgba(8,8,8,.96) 0%,rgba(8,8,8,.7) 50%,rgba(8,8,8,.04) 100%)}
+.dim-right{background:linear-gradient(to left,rgba(8,8,8,.96) 0%,rgba(8,8,8,.7) 50%,rgba(8,8,8,.04) 100%)}
+.dark-warm{background:radial-gradient(ellipse at 30% 55%,#1c130e 0%,#0a0808 70%)}
+.dark-letter{background:radial-gradient(ellipse at 20% 40%,#160e0b 0%,#080606 65%)}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none}
+.o1{width:350px;height:350px;background:rgba(201,169,110,.06);top:-80px;left:-80px;animation:drift 13s ease-in-out infinite alternate}
+.o2{width:260px;height:260px;background:rgba(232,196,176,.05);bottom:-60px;right:-60px;animation:drift 17s ease-in-out infinite alternate-reverse}
+.o3{width:420px;height:420px;background:rgba(201,169,110,.04);top:-120px;right:-80px;animation:drift 15s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate(0,0)}to{transform:translate(25px,18px)}}
 
-    <!-- SLIDE 6 -->
-    <div class="slide" data-i="5">
-      <div class="sl-bg">
-        <img src="images/bestfriend_hug.jpg" class="sl-img kb-up" onerror="this.style.opacity='0'"/>
-        <div class="sl-dim dim-full"></div>
-      </div>
-      <div class="sl-body center">
-        <span class="sl-tag s1">The way you love</span>
-        <h2 class="sl-h s2">She loves<br/><em>fully.</em></h2>
-        <p class="sl-p s3">When she loves someone, she loves them completely.
-        No half-measures, no holding back.
-        That is one of the most beautiful things about her.</p>
-        <div class="sl-heart s4">🤍</div>
-      </div>
-    </div>
+/* slide body */
+.sl-body{
+  position:relative;z-index:10;
+  display:flex;flex-direction:column;
+  width:100%;min-height:100%;
+  padding-top:calc(3.5rem + env(safe-area-inset-top,0px));
+  padding-left:calc(1.5rem + env(safe-area-inset-left,0px));
+  padding-right:calc(1.5rem + env(safe-area-inset-right,0px));
+  padding-bottom:calc(6.5rem + env(safe-area-inset-bottom,0px));
+}
+.sl-body.center{justify-content:center;align-items:center;text-align:center}
+.sl-body.left{justify-content:flex-end;align-items:flex-start;text-align:left}
+.sl-body.right{justify-content:flex-end;align-items:flex-end;text-align:right}
+.sl-body.letter-body{justify-content:flex-start;align-items:flex-start;text-align:left;overflow-y:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-top:calc(4.5rem + env(safe-area-inset-top,0px))}
+.sl-body.letter-body::-webkit-scrollbar{display:none}
 
-    <!-- SLIDE 7 -->
-    <div class="slide" data-i="6">
-      <div class="sl-bg">
-        <img src="images/idiot_dosa_story.jpg" class="sl-img kb-left" onerror="this.style.opacity='0'"/>
-        <div class="sl-dim dim-left"></div>
-      </div>
-      <div class="sl-body left">
-        <span class="sl-tag s1">Can we talk about</span>
-        <h2 class="sl-h s2">How are you<br/>this cute?</h2>
-        <p class="sl-p s3">Genuinely — I don't understand it.
-        You make the most normal expressions
-        and somehow they are adorable every single time.
-        It is a little unfair, honestly.</p>
-        <div class="sl-quote s4">
-          <span>"Stop being this cute. It's too much."</span>
-        </div>
-      </div>
-    </div>
+/* stagger */
+.s1,.s2,.s3,.s4,.s5,.s6,.s7{opacity:0;transform:translateY(22px)}
+.slide.active .s1{animation:sup .75s cubic-bezier(.16,1,.3,1) .1s  both}
+.slide.active .s2{animation:sup .8s  cubic-bezier(.16,1,.3,1) .22s both}
+.slide.active .s3{animation:sup .8s  cubic-bezier(.16,1,.3,1) .36s both}
+.slide.active .s4{animation:sup .75s cubic-bezier(.16,1,.3,1) .5s  both}
+.slide.active .s5{animation:sup .75s cubic-bezier(.16,1,.3,1) .62s both}
+.slide.active .s6{animation:sup .75s cubic-bezier(.16,1,.3,1) .74s both}
+.slide.active .s7{animation:sup .75s cubic-bezier(.16,1,.3,1) .86s both}
+.slide.active .mem-item{animation:sleft .75s cubic-bezier(.16,1,.3,1) both}
+.slide.active .mem-item.s3{animation-delay:.32s}
+.slide.active .mem-item.s4{animation-delay:.46s}
+.slide.active .mem-item.s5{animation-delay:.58s}
+.slide.active .mem-item.s6{animation-delay:.7s}
+.slide.active .mem-item.s7{animation-delay:.82s}
+@keyframes sup{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes sleft{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:none}}
 
-    <!-- SLIDE 8: LETTER -->
-    <div class="slide slide-letter" data-i="7">
-      <div class="sl-bg dark-letter">
-        <div class="orb o3"></div>
-      </div>
-      <div class="sl-body letter-body">
-        <span class="sl-tag s1">And finally —</span>
-        <h2 class="letter-h s2">The part I<br/>really mean.</h2>
-        <div class="letter-text s3">
-          <p>I made this because I wanted you to feel something real today.</p>
-          <p>I don't say things like this out loud very often. But I figured — at least once — you deserve to read all of it in one place.</p>
-          <p>You are one of those rare people who just makes life better. Not because you're perfect or because everything is always okay — but because you're genuinely, completely yourself. And that version of you is someone I feel lucky to know.</p>
-          <p>You've been there in ways that mattered. Quietly, without making it a big thing. That's the part that gets me the most — you don't even realise how much you mean to the people around you.</p>
-          <p>I've watched you go through things that weren't easy, and I've watched you come out of them still smiling, still warm, still you. That is not small. That is actually everything.</p>
-          <p class="letter-em">You are loved. More than you know. More than you let yourself believe.</p>
-          <p>Thank you for being in my life. Genuinely — thank you.</p>
-          <p class="letter-sign">— With so much love,<br/>Your person 🤍</p>
-        </div>
-        <div class="letter-foot s4">
-          <div class="replay-btn" id="replay-btn">↺ &nbsp;Watch again</div>
-        </div>
-      </div>
-    </div>
+/* typography */
+.sl-tag{display:block;font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:#c9a96e;margin-bottom:.65rem;opacity:.9}
+.sl-h{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,6vw,4rem);font-weight:700;line-height:1.06;letter-spacing:-.025em;color:#f0ebe0;margin-bottom:.9rem}
+.sl-h em{font-style:italic;font-weight:400;color:#c9a96e}
+.sl-p{font-family:'Inter',sans-serif;font-size:clamp(.83rem,1.5vw,.96rem);font-weight:300;line-height:1.82;color:rgba(240,235,224,.52);max-width:min(380px,100%)}
+.sl-line{width:44px;height:1px;margin-top:1.3rem;background:linear-gradient(90deg,transparent,#c9a96e,transparent)}
+.sl-quote{margin-top:1.4rem;padding:.85rem 1.1rem;border-left:2px solid #c9a96e;background:rgba(201,169,110,.06);border-radius:0 5px 5px 0;max-width:min(320px,100%);flex-shrink:0}
+.sl-quote span{font-family:'Playfair Display',serif;font-style:italic;font-size:.9rem;color:#e8c4b0;line-height:1.6}
+.mem-list{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-top:1.2rem;max-width:min(500px,100%);width:100%}
+.mem-item{display:flex;align-items:flex-start;gap:.85rem;padding:.8rem 1rem;background:rgba(255,255,255,.03);border:1px solid rgba(201,169,110,.1);border-radius:8px;font-size:clamp(.79rem,1.3vw,.88rem);font-weight:300;color:rgba(240,235,224,.52);line-height:1.6;backdrop-filter:blur(8px)}
+.mem-ico{font-size:.95rem;flex-shrink:0;margin-top:.05rem}
+.sl-heart{display:inline-block;font-size:1.7rem;margin-top:1.2rem;animation:hbeat 1.6s ease-in-out infinite}
+@keyframes hbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.2)}28%{transform:scale(1)}42%{transform:scale(1.12)}}
+.sl-hint{position:absolute;bottom:calc(5rem + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.14em;color:rgba(240,235,224,.25);white-space:nowrap;z-index:10}
+.slide.active .sl-hint{animation:bhint 2s ease-in-out 1.8s infinite}
+@keyframes bhint{0%,100%{opacity:.2;transform:translateX(-50%) translateY(0)}50%{opacity:.6;transform:translateX(-50%) translateY(-4px)}}
 
-  </div>
+/* letter */
+.letter-h{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.6rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;color:#f0ebe0;margin-bottom:1.8rem;margin-top:.2rem}
+.letter-text{display:flex;flex-direction:column;gap:1.1rem;max-width:min(560px,100%);font-family:'Inter',sans-serif;font-size:clamp(.86rem,1.5vw,.98rem);font-weight:300;line-height:1.88;color:rgba(240,235,224,.52)}
+.letter-em{font-family:'Playfair Display',serif!important;font-size:clamp(.98rem,2vw,1.18rem);font-style:italic;color:#f0ebe0!important;font-weight:400;line-height:1.6;padding:.95rem 1.2rem;border-left:2px solid #c9a96e;background:rgba(201,169,110,.05);border-radius:0 5px 5px 0}
+.letter-sign{color:#e8c4b0!important;font-family:'Playfair Display',serif!important;font-style:italic;font-size:.96rem!important;margin-top:.4rem;line-height:2}
+.letter-foot{margin-top:1.8rem;padding-top:1.6rem;border-top:1px solid rgba(255,255,255,.08);max-width:min(560px,100%)}
+.replay-btn{display:inline-flex;align-items:center;gap:.45rem;padding:.6rem 1.2rem;border:1px solid rgba(255,255,255,.09);border-radius:50px;font-family:'DM Mono',monospace;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,235,224,.28);transition:all .3s ease;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.replay-btn:hover{border-color:#c9a96e;color:#c9a96e;background:rgba(201,169,110,.05)}
 
-  <div class="nav-arr prev" id="nav-prev">
-    <svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </div>
-  <div class="nav-arr next" id="nav-next">
-    <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </div>
+/* nav */
+.nav-arr{position:fixed;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(10,10,10,.7);border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(12px);color:rgba(240,235,224,.45);z-index:100;transition:all .3s ease;opacity:.4;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.nav-arr svg{width:18px;height:18px}
+.nav-arr:hover{opacity:1;border-color:rgba(201,169,110,.3);color:#f0ebe0;transform:translateY(-50%) scale(1.1)}
+.nav-arr.hide{opacity:0!important;pointer-events:none}
+.prev{left:calc(.7rem + env(safe-area-inset-left,0px))}
+.next{right:calc(.7rem + env(safe-area-inset-right,0px))}
 
-  <div class="dot-row" id="dot-row"></div>
+/* dots */
+.dot-row{position:fixed;bottom:calc(1rem + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);display:flex;gap:.4rem;align-items:center;z-index:100}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18);transition:all .4s cubic-bezier(.16,1,.3,1);cursor:pointer;border:none;padding:0;-webkit-tap-highlight-color:transparent}
+.dot.on{width:18px;border-radius:3px;background:#c9a96e}
+.dot:hover:not(.on){background:rgba(255,255,255,.4)}
 
-</div>
+/* music */
+.music-wrap{position:fixed;bottom:calc(1rem + env(safe-area-inset-bottom,0px));right:calc(.9rem + env(safe-area-inset-right,0px));z-index:200;opacity:0;transform:translateY(10px);transition:opacity .6s ease 1.5s,transform .6s ease 1.5s;-webkit-tap-highlight-color:transparent}
+.music-wrap.on{opacity:1;transform:none}
+.music-btn{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(12,12,12,.92);border:1px solid rgba(201,169,110,.2);backdrop-filter:blur(18px);position:relative;overflow:hidden;transition:border-color .3s,transform .3s ease,box-shadow .3s;cursor:pointer}
+.music-btn:hover{border-color:rgba(201,169,110,.45);transform:scale(1.1);box-shadow:0 0 18px rgba(201,169,110,.18)}
+.mv{width:26px;height:26px;border-radius:50%;background:conic-gradient(from 0deg,#1c1c1c 0%,#272727 25%,#1c1c1c 50%,#2a2a2a 75%,#1c1c1c 100%);display:flex;align-items:center;justify-content:center;position:relative;transition:opacity .25s ease}
+.mv-ring{position:absolute;inset:3px;border-radius:50%;border:1px solid rgba(201,169,110,.2)}
+.mv-dot{width:7px;height:7px;border-radius:50%;background:#c9a96e;z-index:1}
+.music-btn.play .mv{animation:spin 2.4s linear infinite;opacity:0}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.mw{position:absolute;display:flex;align-items:center;gap:2px;opacity:0;transition:opacity .25s ease}
+.music-btn.play .mw{opacity:1}
+.mw span{display:block;width:3px;border-radius:2px;background:#c9a96e;animation:wv .85s ease-in-out infinite}
+.mw span:nth-child(1){height:6px;animation-delay:0s}.mw span:nth-child(2){height:13px;animation-delay:.17s}.mw span:nth-child(3){height:8px;animation-delay:.34s}.mw span:nth-child(4){height:15px;animation-delay:.08s}.mw span:nth-child(5){height:6px;animation-delay:.25s}
+@keyframes wv{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
 
-<!-- MUSIC -->
-<div class="music-wrap" id="music-wrap">
-  <audio id="audio" loop><source src="audio/song.mp3" type="audio/mpeg"/></audio>
-  <div class="music-btn" id="music-btn">
-    <div class="mv" id="mv"><div class="mv-ring"></div><div class="mv-dot"></div></div>
-    <div class="mw" id="mw"><span></span><span></span><span></span><span></span><span></span></div>
-  </div>
-</div>
+/* fade overlay */
+.fade-overlay{position:fixed;inset:0;background:#000;z-index:999;opacity:0;pointer-events:none;transition:opacity .32s ease}
+.fade-overlay.on{opacity:1;pointer-events:all}
 
-<div class="fade-overlay" id="fade-overlay"></div>
+/* particles canvas */
+#particle-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
+#particle-canvas.on{opacity:1}
 
-<script src="script.js"></script>
-</body>
-</html>
+/* shared animation */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ── DESKTOP ── */
+@media(min-width:769px){
+  .sl-body.left{max-width:52%;justify-content:center}
+  .sl-body.right{max-width:52%;margin-left:auto;justify-content:center}
+  .card-grid{grid-template-columns:repeat(4,1fr)}
+  .intro-wrap{max
